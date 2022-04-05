@@ -1,2 +1,2 @@
 # tutorial-back-test
-Rest API Application
+Node.js Rest API with Express and MySQL
