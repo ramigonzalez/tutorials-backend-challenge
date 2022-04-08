@@ -1,13 +1,13 @@
-module.exports = class TutorialController {
-    
-    constructor() {
-        console.log('TutorialController INITIALIZED')
-    }
+const Repository = require('../repositories');
 
-    async get(req, res, next) {
+module.exports = class TutorialsController {
+
+    async getTutorials(req, res, next) {
         try {
+            const users = await Repository.User.findAll();
             res.status(200);
-            res.json([]);
+            res.body = { users };
+            console.log(users);
             next();
         } catch (error) {
             next(error);
