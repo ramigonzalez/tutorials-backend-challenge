@@ -3,13 +3,13 @@ const AuthService = require('../services/auth.service');
 module.exports = class AuthController {
     
     constructor() {
-        this.authservice = new AuthService();
+        this.authService = new AuthService();
     }
 
     async authenticate(req, res, next) {
         try {
             const credentials = this.sanitize(req.body);
-            const token = await this.authservice.authenticate(credentials);
+            const token = await this.authService.authenticate(credentials);
             res.status(200);
             res.body = { token };
             next();
