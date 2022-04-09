@@ -102,3 +102,9 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Security public and private keys
+*/security
+
+# VSCode Workspace
+tutorial-back-test.code-workspace
