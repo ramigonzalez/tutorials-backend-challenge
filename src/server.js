@@ -5,9 +5,6 @@ require('dotenv').config({
 const Repository = require('./repositories');
 const { okHandler, errorHandler, notFound } = require('./middlewares');
 
-
-
-
 const port = process.env.NODE_PORT;
 
 const express = require('express');
@@ -26,8 +23,6 @@ require('./routes')(app);
 app.use(notFound);
 app.use(okHandler);
 app.use(errorHandler);
-
-
 
 Repository.init()
 .then(() => app.listen(port, () => console.info(`Tutorials Server is listening on port ${port}`)))

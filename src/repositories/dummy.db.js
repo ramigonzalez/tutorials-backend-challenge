@@ -1,3 +1,5 @@
+const hash = require('../utils/hash');
+
 module.exports.createDummyData = async (models) => {
 
     const User = models.user;
@@ -8,7 +10,7 @@ module.exports.createDummyData = async (models) => {
             first_name: 'first name test' + i,
             last_name: 'last name test' + i,
             email: 'mail@' + i + '.com',
-            password: `pa$$${i}${i}${i}${i}`,
+            password: hash(`pa$$${i}${i}${i}${i}##S3cre7`),
             role: (i%2 == 0 ? 'ADMIN' : 'USER')
         }
         arr.push(User.create(user));
