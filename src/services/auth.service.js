@@ -1,6 +1,6 @@
 const Repository = require('../repositories');
 const jwt = require('jsonwebtoken');
-const { getPrivateKey, getRandomNumber, signOptions } = require('../utils/jwttoken');
+const { getPrivateKey, getRandomNumber, userSignOptions } = require('../utils/jwttoken');
 const hash = require('../utils/hash');
 
 module.exports = class AuthService {
@@ -8,7 +8,6 @@ module.exports = class AuthService {
     async authenticate(credentials) {
         try {
             credentials.password = hash(credentials.password);
-            console.log(credentials.password)
             const ret = await Repository.User.findOne({ where: credentials });
             if (!ret) throw new Error('The credentials provided does not belong to any user.');
             const user = ret.get();
@@ -34,7 +33,7 @@ const sessionToken = (user) => {
         role, 
         randomness: getRandomNumber()
     };
-    return jwt.sign(payload, privateKey, signOptions());
+    return jwt.sign(payload, privateKey, userSignOptions());
 }
 
 
