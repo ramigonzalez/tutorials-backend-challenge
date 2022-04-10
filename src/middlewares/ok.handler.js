@@ -1,8 +1,7 @@
-
 module.exports = (req, res, next) => {
-    const statusCode = res.statusCode;
-    res.json({
-        statusCode,
+    const response = {
+        statusCode: res.statusCode,
         data: res.body,
-    });
-}
+    };
+    res.json(response);
+};
