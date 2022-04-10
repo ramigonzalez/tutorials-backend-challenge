@@ -106,5 +106,6 @@ dist
 # Security public and private keys
 */security
 
-# VSCode Workspace
+# VSCode filed
 tutorial-back-test.code-workspace
+.vscode/launch.json
