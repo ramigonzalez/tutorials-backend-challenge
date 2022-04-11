@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { InternalServerException } = require('../exceptions');
 
 const userSignOptions = () => {
     const isUser = true;
@@ -12,7 +13,7 @@ const tutorialTokenSignOptions = () => {
 
 const signOptions = (isUser) => {
     const algorithm = process.env.JWT_ALGORITM || '';
-    if (!algorithm) throw new Error('Sign algorithm option cannot be null');
+    if (!algorithm) throw new InternalServerException('Missing sign option algorithm');
 
     const expiresIn = isUser
         ? process.env.JWT_USER_TOKEN_EXPIRES_IN || '24h'
@@ -24,19 +25,15 @@ const signOptions = (isUser) => {
     };
 };
 
-const checkIfFileExists = (path) => {
-    if (!fs.existsSync(path)) throw new Error('File does not exist');
-};
-
 const getPrivateKey = () => {
     const path = process.env.JWT_PRIVATE_KEY_PATH || '';
-    if (!path) throw new Error('Invalid private key path');
+    if (!path) throw new InternalServerException('Private key path configuration is missing');
     return readKey(path);
 };
 
 const getPublicKey = () => {
     const path = process.env.JWT_PUBLIC_KEY_PATH || '';
-    if (!path) throw new Error('Invalid public key path');
+    if (!path) throw new InternalServerException('Public key path configuration is missing');
     return readKey(path);
 };
 
@@ -44,9 +41,17 @@ const readKey = (path) => {
     try {
         checkIfFileExists(path);
         return fs.readFileSync(path, 'utf8');
-    } catch (err) {
-        console.error('Error:', err.stack);
+    } catch (error) {
+        throw new InternalServerException(
+            `Something went wrong while reading keys on path: '${path}'`,
+            error
+        );
     }
+};
+
+const checkIfFileExists = (path) => {
+    if (!fs.existsSync(path))
+        throw new InternalServerException(`File on path: '${path}' does not exist`);
 };
 
 const getRandomNumber = () => Math.floor(Math.random() * Date.now());

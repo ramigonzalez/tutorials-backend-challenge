@@ -1,43 +1,36 @@
 const Repository = require('../repositories');
 const jwt = require('jsonwebtoken');
 const { getPrivateKey, getRandomNumber, userSignOptions } = require('../utils/jwttoken');
-const hash = require('../utils/hash');
+const UserService = require('./user.service');
+const { NotFoundException } = require('../exceptions');
 
 module.exports = class AuthService {
-   
+    constructor(repository = Repository) {
+        this.repository = repository;
+        this.userService = new UserService(repository);
+    }
+
     async authenticate(credentials) {
         try {
-            credentials.password = hash(credentials.password);
-            const ret = await Repository.User.findOne({ where: credentials });
-            if (!ret) throw new Error('The credentials provided does not belong to any user.');
-            const user = ret.get();
-            check(user);
+            const user = await this.userService.login(credentials);
             return sessionToken(user);
         } catch (error) {
-            console.error(error.message)
-            throw new Error(error.message);
+            if (BaseError.isTrustedError(error)) {
+                throw new NotFoundException('Could not authenticate requested user', error);
+            }
+            throw new InternalServerException('Somethig went wrong authenticating user', error);
         }
     }
-}
-
-const check = (user) => {
-    if (!user) throw new Error('User does not exists') 
 };
 
 const sessionToken = (user) => {
     const privateKey = getPrivateKey();
 
     const { email, role } = user;
-    const payload = { 
+    const payload = {
         email,
-        role, 
-        randomness: getRandomNumber()
+        role,
+        randomness: getRandomNumber(),
     };
     return jwt.sign(payload, privateKey, userSignOptions());
-}
-
-
-
-
-
-
+};

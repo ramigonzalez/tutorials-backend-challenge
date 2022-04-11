@@ -1,26 +1,25 @@
+const { isDevelopmentOrTesting } = require('../../config/environment');
+
 module.exports = (err, req, res, next) => {
-
-    const message = isValidationError(err) ? err.error.message : err.message;
-    if (err) {
-        res.status(400);
-        res.json({
-            statusCode: 400,
-            message,
-            exception: err.name,
-            stacktrace: err.stack
-        });
-    } else if(res.statusCode >= 400) {
-        res.json({
-            statusCode: res.statusCode,
+    const statusCode = err.httpStatusCode;
+    const response = {
+        statusCode,
+        exception: {
             message: err.message,
-            error: { message }
-        });
-    } else {
-        console.error('Not handled exception: ', err);
-        next(err)
-    }
-}
+            exceptionName: err.name,
+        },
+    };
 
-const isValidationError = (err) => {
-    return err.error && err.error.message;
-}
+    if (isDevelopmentOrTesting() && err.stackTrace) {
+        response.exception = { ...response.exception, stackTrace: err.stackTrace };
+    }
+
+    if (err.innerException) {
+        const innerException = isDevelopmentOrTesting()
+            ? err.innerException
+            : { name: err.innerException.name, message: err.innerException.message };
+        response.exception = { ...response.exception, innerException };
+    }
+
+    res.status(statusCode).json(response);
+};

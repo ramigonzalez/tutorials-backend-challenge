@@ -1,4 +1,5 @@
 const AuthService = require('../services/auth.service');
+const { isValidEmail } = require('../utils/regex');
 
 module.exports = class AuthController {
     constructor() {
@@ -21,7 +22,7 @@ module.exports = class AuthController {
     validate(requestBody) {
         if (!requestBody) throw Error('Request body cannot be null or empty');
         const { email, password } = requestBody;
-        if (!email || typeof email != 'string' || email.trim() === '')
+        if (!email || typeof email != 'string' || email.trim() === '' || !isValidEmail(email))
             throw Error("'email' param is invalid");
         if (!password || typeof email != 'string' || password.trim() === '')
             throw Error("'password' param is invalid");

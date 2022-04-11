@@ -1,5 +1,7 @@
+const authRoutes = require('./auth.routes');
+const tutorialRoutes = require('./tutorials.routes');
 
-module.exports = app => {
-    require('./auth.routes')(app);
-    require('./tutorials.routes')(app);
-}
+module.exports = (app) => {
+    authRoutes(app);
+    tutorialRoutes(app);
+};
