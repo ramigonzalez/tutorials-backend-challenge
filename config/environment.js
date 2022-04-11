@@ -1,6 +1,5 @@
 module.exports.isDevelopmentOrTesting = () => {
     const env = process.env.NODE_ENV;
-    console.log(' ** env **', env);
     return env === 'development' || env === 'test';
 };
 

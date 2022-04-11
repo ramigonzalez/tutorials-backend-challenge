@@ -10,15 +10,17 @@ module.exports = class BaseError extends Error {
         console.error('Message:', message, '\nStackTrace:', this.stackTrace);
     }
 
-    buildInnerException(err) {
-        return err.stack ? err.stack.split('\n', 2).join('') : '';
+    buildInnerException(inner) {
+        const stackTrace = inner.stack ? inner.stack.split('\n', 2).join('') : '';
+        const message = inner.message || '';
+        return { name: inner.name, message, stackTrace };
     }
 
     buildStackTrace(err) {
         return err.stack.split('\n', 2).join('');
     }
 
-    static handleError(err) {
-        if (err && err.isOperational) throw err;
+    static isTrustedError(error) {
+        return error && error.isOperational;
     }
 };

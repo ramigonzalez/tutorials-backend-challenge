@@ -1,6 +1,8 @@
 const { loadConfiguration } = require('../config/environment');
 loadConfiguration();
 
+require('express-async-errors');
+
 const Repository = require('./repositories');
 const { okHandler, errorHandler, notFound } = require('./middlewares');
 const routes = require('./routes');
@@ -17,18 +19,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(morgan('dev'));
 
-process.on('unhandledRejection', (reason, promise) => {
-    console.error('Error: unhandledRejection');
-    throw reason;
-});
-
-process.on('uncaughtException', (error) => {
-    console.error('Error: uncaughtException');
-    if (!error instanceof BaseError) {
-        process.exit(1);
-    }
-});
-
 routes(app);
 app.use(notFound);
 app.use(okHandler);
@@ -40,3 +30,15 @@ Repository.init()
         console.error('Could not connect with database', err.message);
         process.exit(1);
     });
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Error: unhandledRejection');
+    throw reason;
+});
+
+process.on('uncaughtException', (error) => {
+    console.error('Error: uncaughtException');
+    if (!error instanceof BaseError) {
+        process.exit(1);
+    }
+});

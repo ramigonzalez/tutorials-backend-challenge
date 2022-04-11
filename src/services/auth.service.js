@@ -15,8 +15,10 @@ module.exports = class AuthService {
             const user = await this.userService.login(credentials);
             return sessionToken(user);
         } catch (error) {
-            if (error.isOperational) throw error;
-            throw new NotFoundException('Could not authenticate requested user', error);
+            if (BaseError.isTrustedError(error)) {
+                throw new NotFoundException('Could not authenticate requested user', error);
+            }
+            throw new InternalServerException('Somethig went wrong authenticating user', error);
         }
     }
 };

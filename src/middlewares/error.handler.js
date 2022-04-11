@@ -1,25 +1,25 @@
-const BaseError = require('../exceptions/base-error');
 const { isDevelopmentOrTesting } = require('../../config/environment');
+
 module.exports = (err, req, res, next) => {
-    if (isTrustedError(err)) {
-        const statusCode = err.httpStatusCode;
-        const response = {
-            statusCode,
-            error: {
-                message: err.message,
-                exceptionName: err.name,
-            },
-        };
+    const statusCode = err.httpStatusCode;
+    const response = {
+        statusCode,
+        exception: {
+            message: err.message,
+            exceptionName: err.name,
+        },
+    };
 
-        if (isDevelopmentOrTesting()) {
-            if (err.innerException) response.innerException = err.innerException;
-            if (err.stackTrace) response.stackTrace = err.stackTrace;
-        }
-
-        res.status(statusCode).json(response);
-    } else {
-        res.status(500).json({ err });
+    if (isDevelopmentOrTesting() && err.stackTrace) {
+        response.exception = { ...response.exception, stackTrace: err.stackTrace };
     }
-};
 
-const isTrustedError = (err) => err instanceof BaseError;
+    if (err.innerException) {
+        const innerException = isDevelopmentOrTesting()
+            ? err.innerException
+            : { name: err.innerException.name, message: err.innerException.message };
+        response.exception = { ...response.exception, innerException };
+    }
+
+    res.status(statusCode).json(response);
+};

@@ -3,7 +3,7 @@ const Op = require('Sequelize').Op;
 
 const jwt = require('jsonwebtoken');
 const { getPrivateKey, getRandomNumber, tutorialTokenSignOptions } = require('../utils/jwttoken');
-const { BadRequestException, NotFoundException, BaseError } = require('../exceptions');
+const { BadRequestException, NotFoundException, InternalServerException, BaseError } = require('../exceptions');
 
 module.exports = class TutorialService {
     constructor(repository = Repository) {
@@ -15,8 +15,10 @@ module.exports = class TutorialService {
             const queryOptions = this.buildQueryOptions(reqOptions);
             return await this.repository.Tutorial.findAll(queryOptions);
         } catch (error) {
-            BaseError.handleError(error);
-            throw new BadRequestException('Could not retrieve tutorials', error);
+            if (BaseError.isTrustedError(error)) {
+                throw new BadRequestException('Could not retrieve tutorials', error);
+            }
+            throw new InternalServerException('Somethig went wrong while retrieving requested tutorials', error);
         }
     }
 
@@ -95,20 +97,29 @@ module.exports = class TutorialService {
             if (!ret) throw new NotFoundException(`Tutorial with id: ${id} not found`);
             return ret.get();
         } catch (error) {
-            BaseError.handleError(error);
-            throw new BadRequestException(`Error while retrieving tutorial with id: ${id}`, error);
+            if (BaseError.isTrustedError(error)) {
+                throw new BadRequestException(`Error while retrieving tutorial with id: ${id}`, error);
+            }
+            throw new InternalServerException(`Somethig went wrong while retrieving id: ${id}`, error);
         }
     }
 
     getTutorialCreationToken(timestamp) {
-        const privateKey = getPrivateKey();
-        const createdAt = new Date(timestamp).toISOString();
-        const payload = {
-            timestamp,
-            createdAt,
-            randomness: getRandomNumber(),
-        };
-        return jwt.sign(payload, privateKey, tutorialTokenSignOptions());
+        try {
+            const privateKey = getPrivateKey();
+            const createdAt = new Date(timestamp).toISOString();
+            const payload = {
+                timestamp,
+                createdAt,
+                randomness: getRandomNumber(),
+            };
+            return jwt.sign(payload, privateKey, tutorialTokenSignOptions());
+        } catch (error) {
+            if (BaseError.isTrustedError(error)) {
+                throw new BadRequestException('Could not create tutorial token', error);
+            }
+            throw new InternalServerException('Somethig went wrong while creating tutorial creation token', error);
+        }
     }
 
     async create(tutorial, userId) {
@@ -121,7 +132,10 @@ module.exports = class TutorialService {
             });
             return ret.get();
         } catch (error) {
-            throw new BadRequestException('Requested tutorial could not be created', error);
+            if (BaseError.isTrustedError(error)) {
+                throw new BadRequestException('Requested tutorial could not be created', error);
+            }
+            throw new InternalServerException(`Somethig went wrong while creating tutorial`, error);
         }
     }
 
@@ -130,7 +144,10 @@ module.exports = class TutorialService {
             const ret = await this.repository.Tutorial.update(tutorial, { where: { id } });
             return ret.get();
         } catch (error) {
-            throw new BadRequestException('Requested tutorial could not be created', error);
+            if (BaseError.isTrustedError(error)) {
+                throw new BadRequestException(`Requested tutorial could not be updated tutorialId=${id}`, error);
+            }
+            throw new InternalServerException(`Somethig went wrong while updating tutorialId=${id}`, error);
         }
     }
 
@@ -140,7 +157,10 @@ module.exports = class TutorialService {
             if (count === 1) return `Tutorial with id: ${id} was deleted successfully`;
             else return `No deletion occurred`;
         } catch (error) {
-            throw new BadRequestException(`Could not delete tutorial with id: ${id}`, error);
+            if (BaseError.isTrustedError(error)) {
+                throw new BadRequestException(`Could not delete tutorial with id: ${id}`, error);
+            }
+            throw new InternalServerException(`Somethig went wrong while deleting tutorialId=${id}`, error);
         }
     }
 
@@ -153,7 +173,10 @@ module.exports = class TutorialService {
             if (count === 1) return `Tutorial with id: ${id} was deleted successfully`;
             else return `No deletion occurred`;
         } catch (error) {
-            throw new BadRequestException(`Could not delete tutorials of logged user: ${userId}`, error);
+            if (BaseError.isTrustedError(error)) {
+                throw new BadRequestException(`Could not delete tutorials for user: ${userId}`, error);
+            }
+            throw new InternalServerException(`Somethig went wrong while deleting for user: ${userId}`, error);
         }
     }
 };
