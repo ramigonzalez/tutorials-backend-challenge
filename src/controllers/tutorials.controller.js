@@ -2,12 +2,13 @@ const TutorialService = require('../services/tutorials.service');
 const UserService = require('../services/user.service');
 const Repository = require('../repositories');
 
-const { validateUrl } = require('../utils/regex');
+const { isValidUrl } = require('../utils/regex');
+const { ValidationException } = require('../exceptions');
 
 module.exports = class TutorialsController {
     constructor() {
         this.tutorialService = new TutorialService(Repository);
-        this.userService = new UserService();
+        this.userService = new UserService(Repository);
     }
 
     async getAllTutorials(req, res, next) {
@@ -61,8 +62,7 @@ module.exports = class TutorialsController {
     getTutorialCreationToken(req, res, next) {
         try {
             const requestedTimestamp = Date.now();
-            const token =
-                this.tutorialService.getTutorialCreationToken(requestedTimestamp);
+            const token = this.tutorialService.getTutorialCreationToken(requestedTimestamp);
             res.status(200);
             res.body = { token };
             next();
@@ -87,23 +87,18 @@ module.exports = class TutorialsController {
     }
 
     validateTutorialUpdate(tutorial) {
-        if (!tutorial) throw Error('Request body cannot be null or empty');
+        if (!tutorial) throw new ValidationException('Request body cannot be null or empty');
 
         const { title, videoUrl, description, publishedStatus } = tutorial;
 
         if (title && (typeof title != 'string' || title.trim() === ''))
-            throw Error("'title' param is invalid");
+            throw new ValidationException("'title' param is invalid");
 
-        if (
-            videoUrl &&
-            (typeof videoUrl != 'string' ||
-                videoUrl.trim() === '' ||
-                !validateUrl(videoUrl))
-        )
-            throw Error("'videoUrl' param is invalid");
+        if (videoUrl && (typeof videoUrl != 'string' || videoUrl.trim() === '' || !isValidUrl(videoUrl)))
+            throw new ValidationException("'videoUrl' param is invalid");
 
         if (description && (typeof description != 'string' || description.trim() === ''))
-            throw Error("'description' param is invalid");
+            throw new ValidationException("'description' param is invalid");
 
         if (
             publishedStatus &&
@@ -111,25 +106,22 @@ module.exports = class TutorialsController {
                 publishedStatus.trim() === '' ||
                 ['PENDING', 'IN PROGRESS', 'PUBLISHED'].findIndex(publishedStatus) === -1)
         )
-            throw Error("'publishedStatus' param is invalid");
+            throw new ValidationException("'publishedStatus' param is invalid");
     }
 
     validateTutorialCreate(tutorial) {
-        if (!tutorial) throw Error('Request body cannot be null or empty');
+        if (!tutorial) throw new ValidationException('Request body cannot be null or empty');
 
         const { title, videoUrl, description } = tutorial;
 
         if (!title || typeof title != 'string' || title.trim() === '')
-            throw Error("'title' param is invalid");
-        if (
-            !videoUrl ||
-            typeof videoUrl != 'string' ||
-            videoUrl.trim() === '' ||
-            !validateUrl(videoUrl)
-        )
-            throw Error("'videoUrl' param is invalid");
+            throw new ValidationException("'title' param is invalid");
+
+        if (!videoUrl || typeof videoUrl != 'string' || videoUrl.trim() === '' || !isValidUrl(videoUrl))
+            throw new ValidationException("'videoUrl' param is invalid");
+
         if (!description || typeof description != 'string' || description.trim() === '')
-            throw Error("'description' param is invalid");
+            throw new ValidationException("'description' param is invalid");
     }
 
     sanitize({ title, videoUrl, description }) {
@@ -155,9 +147,11 @@ module.exports = class TutorialsController {
     }
 
     async delete(req, res, next) {
-        const id = req.params.id;
+        const tutorualId = req.params.id;
         try {
-            const message = await this.tutorialService.delete(id);
+            const { email } = res.userInfo;
+            const { id } = await this.userService.getLoggedUser(email);
+            const message = await this.tutorialService.delete(tutorualId, id);
             res.status(204);
             res.body = { message };
             next();
