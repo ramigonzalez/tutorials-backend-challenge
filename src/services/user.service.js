@@ -1,21 +1,24 @@
-const Repository = require("../repositories")
-const location = 'UserService';
+const Repository = require('../repositories');
+const hash = require('../utils/hash');
+const { NotFoundException, BadRequestException } = require('../exceptions');
 
 module.exports = class UserService {
+    constructor(repository = Repository) {
+        this.repository = repository;
+    }
 
-    async login({ email, password }) {
-        //extract logic inside authService
+    async login(credentials) {
+        credentials.password = hash(credentials.password);
+        const ret = await this.repository.User.findOne({ where: credentials });
+        if (!ret)
+            throw new NotFoundException('Credentials provided does not correspond to any user');
+        return ret.get();
     }
 
     async getLoggedUser(email) {
-        try {
-            /** CHECK EMAIL REGEX  */
-            if (!email) throw new Error('Invalid email requested'); //BadRequestException
-            const user = await Repository.User.findOne({ email });
-            if (!user) throw new Error(`User with email: ${email} not found`); //NotFoundException
-            return user.get();
-        } catch (err) {
-            console.error(location, this.getLoggedUser.name(), err.message);
-        }
+        if (!email) throw new BadRequestException('Invalid email requested');
+        const user = await this.repository.User.findOne({ email });
+        if (!user) throw new NotFoundException(`User email '${email}' was not found`);
+        return user.get();
     }
-}
+};
