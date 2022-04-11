@@ -1,5 +1,5 @@
 const { MethodNotAllowedException } = require('../exceptions');
-module.exports.allowedMethods = (req, _, next, allowedMethods = []) => {
+module.exports.allowedMethods = (req, res, next, allowedMethods = []) => {
     if (
         allowedMethods.length !== 0 &&
         allowedMethods.findIndex((method) => method === req.method) === -1

@@ -8,7 +8,7 @@ module.exports = (app) => {
 
     router
         .post('/', controller.authenticate.bind(controller))
-        .use('/', (req, _, next) => allowedMethods(req, _, next, [httpMethods.POST]));
+        .use('/', (req, res, next) => allowedMethods(req, res, next, [httpMethods.POST]));
 
     app.use('/v1/api/auth', router);
 };

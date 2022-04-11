@@ -1,6 +1,6 @@
 const BaseError = require('../exceptions/base-error');
 const { isDevelopmentOrTesting } = require('../../config/environment');
-module.exports = (err, _, res, _) => {
+module.exports = (err, req, res, next) => {
     if (isTrustedError(err)) {
         const statusCode = err.httpStatusCode;
         const response = {
