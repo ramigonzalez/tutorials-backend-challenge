@@ -1,8 +1,13 @@
-const TutorialsController = require('../controllers/tutorials.controller.js');
-const { allowAdminOnly, tutorialTokenExpiration, verifyUserToken, verifyTutorialToken } = require('../middlewares');
+const TutorialsController = require('../../controllers/tutorials.controller');
+const {
+    allowAdminOnly,
+    tutorialTokenExpiration,
+    verifyUserToken,
+    verifyTutorialToken,
+    allowedMethods,
+} = require('../../middlewares');
 
-const { allowedMethods } = require('../middlewares/method-not-allowed');
-const httpMethods = require('./http-methods');
+const httpMethods = require('../http-methods');
 
 module.exports = (app) => {
     const controller = new TutorialsController();
@@ -36,7 +41,7 @@ module.exports = (app) => {
         .delete(path.MASS_DELETE, verifyUserToken, allowAdminOnly, controller.bulkDelete.bind(controller))
         .use(path.MASS_DELETE, (req, res, next) => allowedMethods(req, res, next, [httpMethods.DELETE]));
 
-    app.use('/v1/api/tutorials', router);
+    app.use('/api/v1/tutorials', router);
 };
 
 const path = {
