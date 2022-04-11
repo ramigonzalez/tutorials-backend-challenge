@@ -1,26 +1,25 @@
-module.exports = (err, req, res, next) => {
+const BaseError = require('../exceptions/base-error');
+const { isDevelopmentOrTesting } = require('../../config/environment');
+module.exports = (err, _, res, _) => {
+    if (isTrustedError(err)) {
+        const statusCode = err.httpStatusCode;
+        const response = {
+            statusCode,
+            error: {
+                message: err.message,
+                exceptionName: err.name,
+            },
+        };
 
-    const message = isValidationError(err) ? err.error.message : err.message;
-    if (err) {
-        res.status(400);
-        res.json({
-            statusCode: 400,
-            message,
-            exception: err.name,
-            stacktrace: err.stack
-        });
-    } else if(res.statusCode >= 400) {
-        res.json({
-            statusCode: res.statusCode,
-            message: err.message,
-            error: { message }
-        });
+        if (isDevelopmentOrTesting()) {
+            if (err.innerException) response.innerException = err.innerException;
+            if (err.stackTrace) response.stackTrace = err.stackTrace;
+        }
+
+        res.status(statusCode).json(response);
     } else {
-        console.error('Not handled exception: ', err);
-        next(err)
+        res.status(500).json({ err });
     }
-}
+};
 
-const isValidationError = (err) => {
-    return err.error && err.error.message;
-}
+const isTrustedError = (err) => err instanceof BaseError;

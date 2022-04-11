@@ -1,8 +1,8 @@
-module.exports = (req, res, next) => {
+const { NotFoundException } = require('../exceptions');
+
+module.exports = (req, _, next) => {
     if (typeof req.route === 'undefined') {
-        res.status(404).json({
-            statusCode: 404,
-            message: 'URI not found',
-        });
-    } else next();
+        next(new NotFoundException(`Resource: ${req.url} not found`));
+    }
+    next();
 };
