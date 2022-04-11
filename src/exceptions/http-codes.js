@@ -6,6 +6,7 @@ module.exports.HttpCodes = {
     FORBIDDEN: { statusCode: 403, name: 'FORBIDDEN' },
     NOT_FOUND: { statusCode: 404, name: 'NOT_FOUND' },
     METHOD_NOT_ALLOWED: { statusCode: 405, name: 'METHOD_NOT_ALLOWED' },
-    SERVICE_UNAVAILABLE: { statusCode: 503, name: 'SERVICE_UNAVAILABLE' },
     INTERNAL_SERVER: { statusCode: 500, name: 'INTERNAL_SERVER' },
+    NOT_IMPLEMENTED: { statusCode: 501, name: 'NOT_IMPLEMENTED' },
+    SERVICE_UNAVAILABLE: { statusCode: 503, name: 'SERVICE_UNAVAILABLE' },
 };

@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { UnauthorizedException } = require('../exceptions');
 
 const { getPublicKey, userSignOptions, tutorialTokenSignOptions } = require('../utils/jwttoken');
 
