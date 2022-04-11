@@ -1,5 +1,5 @@
 module.exports = class BaseError extends Error {
-    constructor(name, httpStatusCode, isOperational, message, innerException = {}) {
+    constructor(name, httpStatusCode, isOperational, message, innerException) {
         super(message);
         this.name = name;
         this.httpStatusCode = httpStatusCode;
@@ -11,9 +11,11 @@ module.exports = class BaseError extends Error {
     }
 
     buildInnerException(inner) {
-        const stackTrace = inner.stack ? inner.stack.split('\n', 2).join('') : '';
-        const message = inner.message || '';
-        return { name: inner.name, message, stackTrace };
+        if (inner) {
+            const stackTrace = inner.stack ? inner.stack.split('\n', 2).join('') : '';
+            const message = inner.message || '';
+            return { name: inner.name, message, stackTrace };
+        }
     }
 
     buildStackTrace(err) {
