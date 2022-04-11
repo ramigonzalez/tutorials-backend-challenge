@@ -2,11 +2,8 @@ const Repository = require('../repositories');
 const Op = require('Sequelize').Op;
 
 const jwt = require('jsonwebtoken');
-const {
-    getPrivateKey,
-    getRandomNumber,
-    tutorialTokenSignOptions,
-} = require('../utils/jwttoken');
+const { getPrivateKey, getRandomNumber, tutorialTokenSignOptions } = require('../utils/jwttoken');
+const { BadRequestException, NotFoundException, InternalServerException, BaseError } = require('../exceptions');
 
 module.exports = class TutorialService {
     constructor(repository = Repository) {
@@ -17,12 +14,11 @@ module.exports = class TutorialService {
         try {
             const queryOptions = this.buildQueryOptions(reqOptions);
             return await this.repository.Tutorial.findAll(queryOptions);
-        } catch (err) {
-            console.error(
-                `[TutorialService.findAll] Error while retrieving tutorials ${err.message}`
-            );
-            throw err;
-            // throw new BadRequestException("", err);
+        } catch (error) {
+            if (BaseError.isTrustedError(error)) {
+                throw new BadRequestException('Could not retrieve tutorials', error);
+            }
+            throw new InternalServerException('Somethig went wrong while retrieving requested tutorials', error);
         }
     }
 
@@ -34,23 +30,21 @@ module.exports = class TutorialService {
         if (sorting) reqOptions.sorting = sorting;
         if (pagination) reqOptions.pagination = pagination;
 
-        console.log('reqOptions', reqOptions);
-
         let queryOptions = {};
 
         queryOptions = this.prepareWhereCondition(queryOptions, reqOptions);
         queryOptions = this.prepareOrderByCondition(queryOptions, reqOptions);
         queryOptions = this.preparePagination(queryOptions, reqOptions);
         queryOptions = this.prepareIncludeCondition(queryOptions);
-        queryOptions.attributes = { exclude: ['deletedAt'] };
 
         return queryOptions;
     }
 
     prepareIncludeCondition(opt = {}) {
+        opt.attributes = { exclude: ['deletedAt', 'userId'] };
         opt.include = [
             {
-                model: Repository.User,
+                model: this.repository.User,
                 attributes: ['id', 'first_name', 'last_name', 'email', 'role'],
             },
         ];
@@ -62,8 +56,7 @@ module.exports = class TutorialService {
         if (filters) {
             const conditionArray = [];
 
-            if (filters.title)
-                conditionArray.push({ title: { [Op.like]: `%${filters.title}%` } });
+            if (filters.title) conditionArray.push({ title: { [Op.like]: `%${filters.title}%` } });
             if (filters.description)
                 conditionArray.push({
                     description: { [Op.like]: `%${filters.description}%` },
@@ -100,71 +93,90 @@ module.exports = class TutorialService {
 
     async find(id) {
         try {
-            const ret = await Repository.Tutorial.findByPk(
-                id,
-                this.prepareIncludeCondition()
-            );
-            if (!ret) throw new Error(`Tutorial with id: ${id} not found`); //NotFoundException
+            const ret = await this.repository.Tutorial.findByPk(id, this.prepareIncludeCondition());
+            if (!ret) throw new NotFoundException(`Tutorial with id: ${id} not found`);
             return ret.get();
-        } catch (err) {
-            console.error(
-                `[TutorialService.find] Error while retrieving tutorial with id: ${id}`,
-                err.message
-            );
-            throw err;
-            // throw new BadRequestException("", err);
+        } catch (error) {
+            if (BaseError.isTrustedError(error)) {
+                throw new BadRequestException(`Error while retrieving tutorial with id: ${id}`, error);
+            }
+            throw new InternalServerException(`Somethig went wrong while retrieving id: ${id}`, error);
         }
     }
 
     getTutorialCreationToken(timestamp) {
-        const privateKey = getPrivateKey();
-        const createdAt = new Date(timestamp).toISOString();
-        const payload = {
-            timestamp,
-            createdAt,
-            randomness: getRandomNumber(),
-        };
-        return jwt.sign(payload, privateKey, tutorialTokenSignOptions());
+        try {
+            const privateKey = getPrivateKey();
+            const createdAt = new Date(timestamp).toISOString();
+            const payload = {
+                timestamp,
+                createdAt,
+                randomness: getRandomNumber(),
+            };
+            return jwt.sign(payload, privateKey, tutorialTokenSignOptions());
+        } catch (error) {
+            if (BaseError.isTrustedError(error)) {
+                throw new BadRequestException('Could not create tutorial token', error);
+            }
+            throw new InternalServerException('Somethig went wrong while creating tutorial creation token', error);
+        }
     }
 
     async create(tutorial, userId) {
-        const ret = await Repository.Tutorial.create({
-            ...tutorial,
-            userId,
-            video_url: tutorial.videoUrl,
-            published_status: 'PENDING',
-        });
-        return ret.get();
+        try {
+            const ret = await this.repository.Tutorial.create({
+                ...tutorial,
+                userId,
+                video_url: tutorial.videoUrl,
+                published_status: 'PENDING',
+            });
+            return ret.get();
+        } catch (error) {
+            if (BaseError.isTrustedError(error)) {
+                throw new BadRequestException('Requested tutorial could not be created', error);
+            }
+            throw new InternalServerException(`Somethig went wrong while creating tutorial`, error);
+        }
     }
 
     async update(tutorial, id) {
-        const ret = await Repository.Tutorial.update(tutorial, { where: { id } });
-        return ret.get();
+        try {
+            const ret = await this.repository.Tutorial.update(tutorial, { where: { id } });
+            return ret.get();
+        } catch (error) {
+            if (BaseError.isTrustedError(error)) {
+                throw new BadRequestException(`Requested tutorial could not be updated tutorialId=${id}`, error);
+            }
+            throw new InternalServerException(`Somethig went wrong while updating tutorialId=${id}`, error);
+        }
     }
 
-    async delete(id) {
+    async delete(id, userId) {
         try {
-            const count = await Repository.Tutorial.destroy({ where: { id } });
+            const count = await this.repository.Tutorial.destroy({ where: { id, userId } });
             if (count === 1) return `Tutorial with id: ${id} was deleted successfully`;
             else return `No deletion occurred`;
         } catch (error) {
-            throw new Error(`Could not delete tutorial with id: ${id}`, error.message);
+            if (BaseError.isTrustedError(error)) {
+                throw new BadRequestException(`Could not delete tutorial with id: ${id}`, error);
+            }
+            throw new InternalServerException(`Somethig went wrong while deleting tutorialId=${id}`, error);
         }
     }
 
     async deleteAllByUser(userId) {
         try {
-            const count = await Repository.Tutorial.destroy({
+            const count = await this.repository.Tutorial.destroy({
                 where: { userId },
                 truncate: false,
             });
             if (count === 1) return `Tutorial with id: ${id} was deleted successfully`;
             else return `No deletion occurred`;
         } catch (error) {
-            throw new Error(
-                `Could not delete tutorials of logged user: ${userId}`,
-                error.message
-            );
+            if (BaseError.isTrustedError(error)) {
+                throw new BadRequestException(`Could not delete tutorials for user: ${userId}`, error);
+            }
+            throw new InternalServerException(`Somethig went wrong while deleting for user: ${userId}`, error);
         }
     }
 };
