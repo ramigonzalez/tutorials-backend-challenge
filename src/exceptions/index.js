@@ -6,6 +6,7 @@ const NotFoundException = require('./api/not-found-exception');
 const ServiceUnavailableException = require('./api/service-unavailable-exception');
 const UnauthorizedException = require('./api/unauthorized-exception');
 const ValidationException = require('./api/validation-exception');
+const NotImplementedException = require('./api/not-implemented-exception');
 
 const BaseError = require('./base-error');
 
@@ -19,4 +20,5 @@ module.exports = {
     UnauthorizedException,
     ValidationException,
     BaseError,
+    NotImplementedException,
 };

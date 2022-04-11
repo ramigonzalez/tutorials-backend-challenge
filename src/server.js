@@ -20,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 routes(app);
+
 app.use(notFound);
 app.use(okHandler);
 app.use(errorHandler);

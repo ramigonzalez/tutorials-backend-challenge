@@ -3,7 +3,7 @@ const { HttpCodes } = require('../http-codes');
 
 module.exports = class UnauthorizedException extends BaseError {
     constructor(message = 'Unauthorized request', innerException) {
-        const status = HttpCodes.SERVICE_UNAVAILABLE;
+        const status = HttpCodes.UNAUTHORIZED;
         super(status.name, status.statusCode, true, message, innerException);
     }
 };
