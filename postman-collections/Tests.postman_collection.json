@@ -1,0 +1,2816 @@
+{
+	"info": {
+		"_postman_id": "5d39d2aa-ca6b-4951-ab4f-27182e12908b",
+		"name": "Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "API Version 1",
+			"item": [
+				{
+					"name": "Status 400 - Bad request",
+					"item": [
+						{
+							"name": "Auth - Bad request body",
+							"item": [
+								{
+									"name": "Authenticate user - empty body",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Response body has 'errors' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"    pm.expect(exception).to.has.property(\"errors\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response body has 'errors.email' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors).to.has.property(\"email\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Cannot be null 'email' error message\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors.email).to.eq(\"cannot be null nor empty\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response body has 'errors.password' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors).to.has.property(\"password\");\r",
+													"});\r",
+													"\r",
+													"\r",
+													"pm.test(\"Cannot be null 'password' error message\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors.password).to.eq(\"cannot be null nor empty\");\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/auth",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"auth"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Authenticate user - email and password null",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Response body has 'errors' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"    pm.expect(exception).to.has.property(\"errors\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response body has 'errors.email' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors).to.has.property(\"email\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Cannot be null 'email' error message\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors.email).to.eq(\"cannot be null nor empty\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response body has 'errors.password' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors).to.has.property(\"password\");\r",
+													"});\r",
+													"\r",
+													"\r",
+													"pm.test(\"Cannot be null 'password' error message\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors.password).to.eq(\"cannot be null nor empty\");\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": null,\r\n    \"password\": null\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/auth",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"auth"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Authenticate user - email and password empty",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Response body has 'errors' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"    pm.expect(exception).to.has.property(\"errors\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response body has 'errors.email' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors).to.has.property(\"email\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Cannot be null 'email' error message\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors.email).to.eq(\"cannot be null nor empty\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response body has 'errors.password' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors).to.has.property(\"password\");\r",
+													"});\r",
+													"\r",
+													"\r",
+													"pm.test(\"Cannot be null 'password' error message\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors.password).to.eq(\"cannot be null nor empty\");\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"\",\r\n    \"password\": \"\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/auth",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"auth"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Authenticate user - email invalid",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Response body has 'errors' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"    pm.expect(exception).to.has.property(\"errors\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response body has 'errors.email' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors).to.has.property(\"email\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Invalid email error message\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors.email).to.eq(\"Email must have valid format. Example: xxx@xxx.xxx\");\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"myinvalidmail.com\",\r\n    \"password\": \"password\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/auth",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"auth"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Tutorials  - Bad request body",
+							"item": [
+								{
+									"name": "Create tutorial - empty body",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Response body has 'errors' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"    pm.expect(exception).to.has.property(\"errors\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response body has 'errors.title' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors).to.has.property(\"title\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response body has 'errors.description' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors).to.has.property(\"description\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response body has 'errors.videoUrl' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors).to.has.property(\"videoUrl\");\r",
+													"});\r",
+													"\r",
+													"const CANNOT_BE_NULL_NOR_EMPTY = \"cannot be null nor empty\";\r",
+													"\r",
+													"pm.test(\"Cannot be null 'title' error message\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors.title).to.eq(CANNOT_BE_NULL_NOR_EMPTY);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Cannot be null 'description' error message\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors.description).to.eq(CANNOT_BE_NULL_NOR_EMPTY);\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Cannot be null 'videoUrl' error message\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors.videoUrl).to.eq(CANNOT_BE_NULL_NOR_EMPTY);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"const AUTHENITCATION_REQUEST = {\r",
+													"    url: pm.environment.get(\"url\") + '/auth',\r",
+													"    method: 'POST',\r",
+													"    header: {\r",
+													"        'Content-Type': 'application/json',\r",
+													"    },\r",
+													"    body: {\r",
+													"        mode: 'raw',\r",
+													"        raw: JSON.stringify({ \r",
+													"            email: pm.environment.get(\"admin_email\"),\r",
+													"            password: pm.environment.get(\"admin_password\")\r",
+													"        })\r",
+													"  }\r",
+													"}\r",
+													"const TUTORIAL_TOKEN_REQUEST = {\r",
+													"    url: pm.environment.get(\"url\") + '/tutorials/token',\r",
+													"    method: 'GET',\r",
+													"}\r",
+													"\r",
+													"pm.sendRequest(AUTHENITCATION_REQUEST, (error, response) => {\r",
+													"    if (response) {\r",
+													"        const jsonData = response.json();\r",
+													"        const jwttoken = jsonData.data.token;\r",
+													"        pm.environment.set(\"jwttoken\", jwttoken);\r",
+													"\r",
+													"        TUTORIAL_TOKEN_REQUEST.header = {\r",
+													"            'Authorization': 'Bearer ' + pm.environment.get(\"jwttoken\")\r",
+													"        }\r",
+													"\r",
+													"        pm.sendRequest(TUTORIAL_TOKEN_REQUEST, (error, response) => {\r",
+													"            if (response) {\r",
+													"                const jsonData = response.json();\r",
+													"                const jwttutorialtoken = jsonData.data.token;\r",
+													"                pm.environment.set(\"jwttutorialtoken\", jwttutorialtoken);\r",
+													"            } \r",
+													"            if(error) console.error(error)\r",
+													"        });\r",
+													"    }\r",
+													"    if(error) console.error(error)\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "authentication-token",
+												"value": "{{jwttutorialtoken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/tutorials",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create tutorial - invalid videoUrl",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Response body has 'errors' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"    pm.expect(exception).to.has.property(\"errors\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response body has 'errors.videoUrl' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors).to.has.property(\"videoUrl\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Invalid url format 'videoUrl' error message\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors.videoUrl).to.eq(\"Invalid url format\");\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"const AUTHENITCATION_REQUEST = {\r",
+													"    url: pm.environment.get(\"url\") + '/auth',\r",
+													"    method: 'POST',\r",
+													"    header: {\r",
+													"        'Content-Type': 'application/json',\r",
+													"    },\r",
+													"    body: {\r",
+													"        mode: 'raw',\r",
+													"        raw: JSON.stringify({ \r",
+													"            email: pm.environment.get(\"admin_email\"),\r",
+													"            password: pm.environment.get(\"admin_password\")\r",
+													"        })\r",
+													"  }\r",
+													"}\r",
+													"const TUTORIAL_TOKEN_REQUEST = {\r",
+													"    url: pm.environment.get(\"url\") + '/tutorials/token',\r",
+													"    method: 'GET',\r",
+													"}\r",
+													"\r",
+													"pm.sendRequest(AUTHENITCATION_REQUEST, (error, response) => {\r",
+													"    if (response) {\r",
+													"        const jsonData = response.json();\r",
+													"        const jwttoken = jsonData.data.token;\r",
+													"        pm.environment.set(\"jwttoken\", jwttoken);\r",
+													"\r",
+													"        TUTORIAL_TOKEN_REQUEST.header = {\r",
+													"            'Authorization': 'Bearer ' + pm.environment.get(\"jwttoken\")\r",
+													"        }\r",
+													"\r",
+													"        pm.sendRequest(TUTORIAL_TOKEN_REQUEST, (error, response) => {\r",
+													"            if (response) {\r",
+													"                const jsonData = response.json();\r",
+													"                const jwttutorialtoken = jsonData.data.token;\r",
+													"                pm.environment.set(\"jwttutorialtoken\", jwttutorialtoken);\r",
+													"            } \r",
+													"            if(error) console.error(error)\r",
+													"        });\r",
+													"    }\r",
+													"    if(error) console.error(error)\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "authentication-token",
+												"value": "{{jwttutorialtoken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"title\": \"Title 1\",\r\n    \"description\": \"A nice description\",\r\n    \"videoUrl\": \"http://www\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/tutorials",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update tutorial - empty body",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Response body has 'errors' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"    pm.expect(exception).to.has.property(\"errors\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Response body has 'errors._error' property\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors).to.has.property(\"_error\");\r",
+													"});\r",
+													"\r",
+													"pm.test(\"Invalid url format 'videoUrl' error message\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    const exception = jsonData.exception\r",
+													"\r",
+													"    pm.expect(exception.errors._error).to.eq(\"At least one attribute must be sent to update a tutorial\");\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"const AUTHENITCATION_REQUEST = {\r",
+													"    url: pm.environment.get(\"url\") + '/auth',\r",
+													"    method: 'POST',\r",
+													"    header: {\r",
+													"        'Content-Type': 'application/json',\r",
+													"    },\r",
+													"    body: {\r",
+													"        mode: 'raw',\r",
+													"        raw: JSON.stringify({ \r",
+													"            email: pm.environment.get(\"admin_email\"),\r",
+													"            password: pm.environment.get(\"admin_password\")\r",
+													"        })\r",
+													"  }\r",
+													"}\r",
+													"\r",
+													"pm.sendRequest(AUTHENITCATION_REQUEST, (error, response) => {\r",
+													"    if (response) {\r",
+													"        const jsonData = response.json();\r",
+													"        const jwttoken = jsonData.data.token;\r",
+													"        pm.environment.set(\"jwttoken\", jwttoken);\r",
+													"    }\r",
+													"    if(error) console.error(error)\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "authentication-token",
+												"value": "{{jwttutorialtoken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/tutorials/1",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update tutorial - invalid status",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"const AUTHENITCATION_REQUEST = {\r",
+													"    url: pm.environment.get(\"url\") + '/auth',\r",
+													"    method: 'POST',\r",
+													"    header: {\r",
+													"        'Content-Type': 'application/json',\r",
+													"    },\r",
+													"    body: {\r",
+													"        mode: 'raw',\r",
+													"        raw: JSON.stringify({ \r",
+													"            email: pm.environment.get(\"admin_email\"),\r",
+													"            password: pm.environment.get(\"admin_password\")\r",
+													"        })\r",
+													"  }\r",
+													"}\r",
+													"\r",
+													"pm.sendRequest(AUTHENITCATION_REQUEST, (error, response) => {\r",
+													"    const jsonData = response.json();\r",
+													"    const jwttoken = jsonData.data.token;\r",
+													"    pm.environment.set(\"jwttoken\", jwttoken);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "authentication-token",
+												"value": "{{jwttutorialtoken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"publishedStatus\": \"IN\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/tutorials/1",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials",
+												"1"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Restricted operation",
+							"item": [
+								{
+									"name": "Update tutorial created by other user",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "authentication-token",
+												"value": "{{jwttutorialtoken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"title\": \"Title UPDATED MARTEEN\",\r\n    \"description\": \"A nice description UPDATED\",\r\n    \"videoUrl\": \"http://www.UPDATED.com\",\r\n    \"publishedStatus\": \"IN PROGRESS\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/tutorials/{{tutorial_id}}",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials",
+												"{{tutorial_id}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete tutorial created by other user",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{url}}/tutorials/{{tutorial_id}}",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials",
+												"{{tutorial_id}}"
+											],
+											"query": [
+												{
+													"key": "filter",
+													"value": null,
+													"disabled": true
+												},
+												{
+													"key": "order",
+													"value": null,
+													"disabled": true
+												}
+											]
+										},
+										"description": "*   Supports **title** and **description** filtering\n*   Supports **tutorial's ID** sorting\n*   Offset based pagination suported"
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"const ADMIN_AUTHENITCATION_REQUEST = {",
+											"    url: pm.environment.get(\"url\") + '/auth',",
+											"    method: 'POST',",
+											"    header: {",
+											"        'Content-Type': 'application/json',",
+											"    },",
+											"    body: {",
+											"        mode: 'raw',",
+											"        raw: JSON.stringify({ ",
+											"            email: pm.environment.get(\"admin_email\"),",
+											"            password: pm.environment.get(\"admin_password\")",
+											"        })",
+											"  }",
+											"}",
+											"",
+											"const NEW_ADMIN_AUTHENITCATION_REQUEST = {",
+											"    url: pm.environment.get(\"url\") + '/auth',",
+											"    method: 'POST',",
+											"    header: {",
+											"        'Content-Type': 'application/json',",
+											"    },",
+											"    body: {",
+											"        mode: 'raw',",
+											"        raw: JSON.stringify({ ",
+											"            email: pm.environment.get(\"new_admin_email\"),",
+											"            password: pm.environment.get(\"new_admin_password\")",
+											"        })",
+											"  }",
+											"}",
+											"",
+											"const CREATE_TUTORIAL_REQUEST = {",
+											"    url: pm.environment.get(\"url\") + '/tutorials',",
+											"    method: 'POST',",
+											"    header: {",
+											"        'Content-Type': 'application/json',",
+											"    },",
+											"    body: {",
+											"        mode: 'raw',",
+											"        raw: JSON.stringify({ ",
+											"            title: 'Title Pre-request',",
+											"            description: 'A nice Pre-request description',",
+											"            videoUrl: 'http://www.pre-request.com'",
+											"        })",
+											"  }",
+											"}",
+											"",
+											"const TUTORIAL_TOKEN_REQUEST = {",
+											"    url: pm.environment.get(\"url\") + '/tutorials/token',",
+											"    method: 'GET',",
+											"}",
+											"",
+											"pm.sendRequest(ADMIN_AUTHENITCATION_REQUEST, (error, response) => {",
+											"    if (response) {",
+											"        const jsonData = response.json();",
+											"        const jwttoken = jsonData.data.token;",
+											"        pm.environment.set(\"jwttoken\", jwttoken);",
+											"",
+											"        TUTORIAL_TOKEN_REQUEST.header = {",
+											"            'Authorization': 'Bearer ' + pm.environment.get(\"jwttoken\")",
+											"        }",
+											"",
+											"        pm.sendRequest(TUTORIAL_TOKEN_REQUEST, (error, response) => {",
+											"            if (response) {",
+											"                const jsonData = response.json();",
+											"                const jwttutorialtoken = jsonData.data.token;",
+											"                pm.environment.set(\"jwttutorialtoken\", jwttutorialtoken);",
+											"",
+											"                CREATE_TUTORIAL_REQUEST.header = {...CREATE_TUTORIAL_REQUEST.header, ",
+											"                    'Authorization': 'Bearer ' + pm.environment.get(\"jwttoken\"),",
+											"                    'authentication-token': pm.environment.get(\"jwttutorialtoken\")",
+											"                }",
+											"",
+											"                pm.sendRequest(CREATE_TUTORIAL_REQUEST, (error, response) => {  ",
+											"                    if (response) {",
+											"                        console.log('CREATE_TUTORIAL_REQUEST',  response.json())",
+											"                            const tutorialId = response.json().data.tutorial.id;",
+											"                            pm.environment.set(\"tutorial_id\",tutorialId)",
+											"",
+											"                        pm.sendRequest(NEW_ADMIN_AUTHENITCATION_REQUEST, (error, response) => {",
+											"                            if (response) {",
+											"                                const jsonData = response.json();",
+											"                                const jwttoken = jsonData.data.token;",
+											"                                pm.environment.set(\"jwttoken\", jwttoken);",
+											"                            }",
+											"                        });",
+											"                    }",
+											"                });",
+											"            } ",
+											"            if(error) console.error(error)",
+											"        });",
+											"    }",
+											"    if(error) console.error(error)",
+											"});",
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							]
+						}
+					],
+					"description": "This collection will test wrong request body validations",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code 400 [Bad tequest]\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response body has 'exception' property\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    console.log(jsonData)",
+									"    pm.expect(jsonData).to.has.property(\"exception\");",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Status 401 - Unauthorized",
+					"item": [
+						{
+							"name": "Get tutorials",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/tutorials",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"tutorials"
+									],
+									"query": [
+										{
+											"key": "description",
+											"value": "description",
+											"disabled": true
+										},
+										{
+											"key": "title",
+											"value": "title",
+											"disabled": true
+										},
+										{
+											"key": "id",
+											"value": "id",
+											"disabled": true
+										},
+										{
+											"key": "orderBy",
+											"value": "orderBy",
+											"disabled": true
+										},
+										{
+											"key": "limit",
+											"value": "limit",
+											"disabled": true
+										},
+										{
+											"key": "offset",
+											"value": "offset",
+											"disabled": true
+										},
+										{
+											"key": "condition",
+											"value": "AND",
+											"description": "The parameter will be used for retrieving either exact or contain matches between title and description",
+											"disabled": true
+										}
+									]
+								},
+								"description": "*   Supports **title** and **description** filtering\n*   Supports **tutorial's ID** sorting\n*   Offset based pagination suported"
+							},
+							"response": []
+						},
+						{
+							"name": "Retrieve single tutorial",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/tutorials/{{tutorial_id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"tutorials",
+										"{{tutorial_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Tutorial token for creation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{url}}/tutorials/token",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"tutorials",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create tutorial",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "authentication-token",
+										"value": "{{jwttutorialtoken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"title\": \"Title 1\",\r\n    \"description\": \"A nice description\",\r\n    \"videoUrl\": \"http://www.myvideo.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/tutorials",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"tutorials"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update tutorial",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "authentication-token",
+										"value": "{{jwttutorialtoken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"title\": \"Title UPDATED MARTEEN\",\r\n    \"description\": \"A nice description UPDATED\",\r\n    \"videoUrl\": \"http://www.UPDATED.com\",\r\n    \"publishedStatus\": \"IN PROGRESS\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/tutorials/{{tutorial_id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"tutorials",
+										"{{tutorial_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete single tutorial",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/tutorials/{{tutorial_id}}",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"tutorials",
+										"{{tutorial_id}}"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "order",
+											"value": null,
+											"disabled": true
+										}
+									]
+								},
+								"description": "*   Supports **title** and **description** filtering\n*   Supports **tutorial's ID** sorting\n*   Offset based pagination suported"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete all tutorials",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/tutorials/mass_delete",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"tutorials",
+										"mass_delete"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "order",
+											"value": null,
+											"disabled": true
+										}
+									]
+								},
+								"description": "*   Supports **title** and **description** filtering\n*   Supports **tutorial's ID** sorting\n*   Offset based pagination suported"
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code 401 [Unauthorized]\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Status 403 - Forbidden",
+					"item": [
+						{
+							"name": "User with USER role",
+							"item": [
+								{
+									"name": "Tutorial token for creation",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"const AUTHENITCATION_REQUEST = {\r",
+													"    url: pm.environment.get(\"url\") + '/auth',\r",
+													"    method: 'POST',\r",
+													"    header: {\r",
+													"        'Content-Type': 'application/json',\r",
+													"    },\r",
+													"    body: {\r",
+													"        mode: 'raw',\r",
+													"        raw: JSON.stringify({ \r",
+													"            email: pm.environment.get(\"user_email\"),\r",
+													"            password: pm.environment.get(\"user_password\")\r",
+													"        })\r",
+													"  }\r",
+													"}\r",
+													"\r",
+													"pm.sendRequest(AUTHENITCATION_REQUEST, (error, response) => {\r",
+													"    if (response) {\r",
+													"        const jsonData = response.json();\r",
+													"        const jwttoken = jsonData.data.token;\r",
+													"        pm.environment.set(\"jwttoken\", jwttoken);\r",
+													"    }\r",
+													"    if(error) console.error(error)\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{url}}/tutorials/token",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials",
+												"token"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create tutorial",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "authentication-token",
+												"value": "{{jwttutorialtoken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"title\": \"Title 1\",\r\n    \"description\": \"A nice description\",\r\n    \"videoUrl\": \"http://www.myvideo.com\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/tutorials",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update tutorial",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "authentication-token",
+												"value": "{{jwttutorialtoken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"title\": \"Title UPDATED MARTEEN\",\r\n    \"description\": \"A nice description UPDATED\",\r\n    \"videoUrl\": \"http://www.UPDATED.com\",\r\n    \"publishedStatus\": \"IN PROGRESS\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/tutorials/{{tutorial_id}}",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials",
+												"{{tutorial_id}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete single tutorial",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{url}}/tutorials/{{tutorial_id}}",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials",
+												"{{tutorial_id}}"
+											],
+											"query": [
+												{
+													"key": "filter",
+													"value": null,
+													"disabled": true
+												},
+												{
+													"key": "order",
+													"value": null,
+													"disabled": true
+												}
+											]
+										},
+										"description": "*   Supports **title** and **description** filtering\n*   Supports **tutorial's ID** sorting\n*   Offset based pagination suported"
+									},
+									"response": []
+								},
+								{
+									"name": "Delete all tutorials",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{url}}/tutorials/mass_delete",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials",
+												"mass_delete"
+											],
+											"query": [
+												{
+													"key": "filter",
+													"value": null,
+													"disabled": true
+												},
+												{
+													"key": "order",
+													"value": null,
+													"disabled": true
+												}
+											]
+										},
+										"description": "*   Supports **title** and **description** filtering\n*   Supports **tutorial's ID** sorting\n*   Offset based pagination suported"
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"const AUTHENITCATION_REQUEST = {",
+											"    url: pm.environment.get(\"url\") + '/auth',",
+											"    method: 'POST',",
+											"    header: {",
+											"        'Content-Type': 'application/json',",
+											"    },",
+											"    body: {",
+											"        mode: 'raw',",
+											"        raw: JSON.stringify({ ",
+											"            email: pm.environment.get(\"user_email\"),",
+											"            password: pm.environment.get(\"user_password\")",
+											"        })",
+											"  }",
+											"}",
+											"",
+											"pm.sendRequest(AUTHENITCATION_REQUEST, (error, response) => {",
+											"    if (response) {",
+											"        const jsonData = response.json();",
+											"        const jwttoken = jsonData.data.token;",
+											"        pm.environment.set(\"jwttoken\", jwttoken);",
+											"    }",
+											"    if(error) console.error(error)",
+											"});"
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Status 404 - Not found",
+					"item": [
+						{
+							"name": "Retrieve single tutorial",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const AUTHENITCATION_REQUEST = {\r",
+											"    url: pm.environment.get(\"url\") + '/auth',\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: JSON.stringify({ \r",
+											"            email: pm.environment.get(\"admin_email\"),\r",
+											"            password: pm.environment.get(\"admin_password\")\r",
+											"        })\r",
+											"  }\r",
+											"}\r",
+											"const DELETE_ALL_REQUEST = {\r",
+											"    url: pm.environment.get(\"url\") + '/tutorials/mass_delete',\r",
+											"    method: 'DELETE',\r",
+											"}\r",
+											"\r",
+											"pm.sendRequest(AUTHENITCATION_REQUEST, (error, response) => {\r",
+											"    if (response) {\r",
+											"        console.log(response)\r",
+											"        const jsonData = response.json();\r",
+											"        const jwttoken = jsonData.data.token;\r",
+											"        pm.environment.set(\"jwttoken\", jwttoken);\r",
+											"        \r",
+											"        DELETE_ALL_REQUEST.header = {\r",
+											"            'Authorization': 'Bearer ' + pm.environment.get(\"jwttoken\")\r",
+											"        }\r",
+											"        pm.sendRequest(DELETE_ALL_REQUEST);\r",
+											"    }\r",
+											"    if(error) console.error(error)\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwttoken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/tutorials/999999999",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"tutorials",
+										"999999999"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update tutorial",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const AUTHENITCATION_REQUEST = {\r",
+											"    url: pm.environment.get(\"url\") + '/auth',\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: JSON.stringify({ \r",
+											"            email: pm.environment.get(\"admin_email\"),\r",
+											"            password: pm.environment.get(\"admin_password\")\r",
+											"        })\r",
+											"  }\r",
+											"}\r",
+											"const DELETE_ALL_REQUEST = {\r",
+											"    url: pm.environment.get(\"url\") + '/tutorials/mass_delete',\r",
+											"    method: 'DELETE',\r",
+											"}\r",
+											"\r",
+											"pm.sendRequest(AUTHENITCATION_REQUEST, (error, response) => {\r",
+											"    if (response) {\r",
+											"        console.log(response)\r",
+											"        const jsonData = response.json();\r",
+											"        const jwttoken = jsonData.data.token;\r",
+											"        pm.environment.set(\"jwttoken\", jwttoken);\r",
+											"        \r",
+											"        DELETE_ALL_REQUEST.header = {\r",
+											"            'Authorization': 'Bearer ' + pm.environment.get(\"jwttoken\")\r",
+											"        }\r",
+											"        pm.sendRequest(DELETE_ALL_REQUEST);\r",
+											"    }\r",
+											"    if(error) console.error(error)\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwttoken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "authentication-token",
+										"value": "{{jwttutorialtoken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"title\": \"Title UPDATED\",\r\n    \"description\": \"A nice UPDATED\",\r\n    \"videoUrl\": \"http://www.UPDATED.com\",\r\n    \"publishedStatus\": \"IN PROGRESS\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/tutorials/999999999",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"tutorials",
+										"999999999"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete single tutorial",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const AUTHENITCATION_REQUEST = {\r",
+											"    url: pm.environment.get(\"url\") + '/auth',\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: JSON.stringify({ \r",
+											"            email: pm.environment.get(\"admin_email\"),\r",
+											"            password: pm.environment.get(\"admin_password\")\r",
+											"        })\r",
+											"  }\r",
+											"}\r",
+											"const DELETE_ALL_REQUEST = {\r",
+											"    url: pm.environment.get(\"url\") + '/tutorials/mass_delete',\r",
+											"    method: 'DELETE',\r",
+											"}\r",
+											"\r",
+											"pm.sendRequest(AUTHENITCATION_REQUEST, (error, response) => {\r",
+											"    if (response) {\r",
+											"        console.log(response)\r",
+											"        const jsonData = response.json();\r",
+											"        const jwttoken = jsonData.data.token;\r",
+											"        pm.environment.set(\"jwttoken\", jwttoken);\r",
+											"        \r",
+											"        DELETE_ALL_REQUEST.header = {\r",
+											"            'Authorization': 'Bearer ' + pm.environment.get(\"jwttoken\")\r",
+											"        }\r",
+											"        pm.sendRequest(DELETE_ALL_REQUEST);\r",
+											"    }\r",
+											"    if(error) console.error(error)\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwttoken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/tutorials/999999999",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"tutorials",
+										"999999999"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "order",
+											"value": null,
+											"disabled": true
+										}
+									]
+								},
+								"description": "*   Supports **title** and **description** filtering\n*   Supports **tutorial's ID** sorting\n*   Offset based pagination suported"
+							},
+							"response": []
+						},
+						{
+							"name": "Authenticate non existant user",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"email\": \"mail@666xx.com\",\r\n    \"password\": \"pa$$7897##S3cre7\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/auth",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"auth"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code 404 [Not found]\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Status 405 - Not supported method",
+					"item": [
+						{
+							"name": "Tutorials",
+							"item": [
+								{
+									"name": "/tutorial",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code 405 [Method not allowed]\", function () {\r",
+													"    pm.response.to.have.status(405);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "authentication-token",
+												"value": "{{jwttutorialtoken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"title\": \"Title UPDATED\",\r\n    \"description\": \"A nice UPDATED\",\r\n    \"videoUrl\": \"http://www.UPDATED.com\",\r\n    \"publishedStatus\": \"IN PROGRESS\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/tutorials",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "/tutorial",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code 405 [Method not allowed]\", function () {\r",
+													"    pm.response.to.have.status(405);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "authentication-token",
+												"value": "{{jwttutorialtoken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"title\": \"Title UPDATED\",\r\n    \"description\": \"A nice UPDATED\",\r\n    \"videoUrl\": \"http://www.UPDATED.com\",\r\n    \"publishedStatus\": \"IN PROGRESS\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/tutorials",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "/tutorial/:id",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code 405 [Method not allowed]\", function () {\r",
+													"    pm.response.to.have.status(405);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "authentication-token",
+												"value": "{{jwttutorialtoken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"title\": \"Title UPDATED\",\r\n    \"description\": \"A nice UPDATED\",\r\n    \"videoUrl\": \"http://www.UPDATED.com\",\r\n    \"publishedStatus\": \"IN PROGRESS\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/tutorials/{{tutorial_id}}",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials",
+												"{{tutorial_id}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "/tutorial/token",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code 405 [Method not allowed]\", function () {\r",
+													"    pm.response.to.have.status(405);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "authentication-token",
+												"value": "{{jwttutorialtoken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"title\": \"Title UPDATED\",\r\n    \"description\": \"A nice UPDATED\",\r\n    \"videoUrl\": \"http://www.UPDATED.com\",\r\n    \"publishedStatus\": \"IN PROGRESS\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/tutorials/token",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials",
+												"token"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "/tutorial/token",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code 405 [Method not allowed]\", function () {\r",
+													"    pm.response.to.have.status(405);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "authentication-token",
+												"value": "{{jwttutorialtoken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"title\": \"Title UPDATED\",\r\n    \"description\": \"A nice UPDATED\",\r\n    \"videoUrl\": \"http://www.UPDATED.com\",\r\n    \"publishedStatus\": \"IN PROGRESS\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/tutorials/token",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials",
+												"token"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "/tutorial/token",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code 405 [Method not allowed]\", function () {\r",
+													"    pm.response.to.have.status(405);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "authentication-token",
+												"value": "{{jwttutorialtoken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"title\": \"Title UPDATED\",\r\n    \"description\": \"A nice UPDATED\",\r\n    \"videoUrl\": \"http://www.UPDATED.com\",\r\n    \"publishedStatus\": \"IN PROGRESS\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/tutorials/token",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials",
+												"token"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "/tutorial/mass_delete",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code 405 [Method not allowed]\", function () {\r",
+													"    pm.response.to.have.status(405);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "authentication-token",
+												"value": "{{jwttutorialtoken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"title\": \"Title UPDATED\",\r\n    \"description\": \"A nice UPDATED\",\r\n    \"videoUrl\": \"http://www.UPDATED.com\",\r\n    \"publishedStatus\": \"IN PROGRESS\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/tutorials/mass_delete",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials",
+												"mass_delete"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "/tutorial/mass_delete",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code 405 [Method not allowed]\", function () {\r",
+													"    pm.response.to.have.status(405);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "authentication-token",
+												"value": "{{jwttutorialtoken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"title\": \"Title UPDATED\",\r\n    \"description\": \"A nice UPDATED\",\r\n    \"videoUrl\": \"http://www.UPDATED.com\",\r\n    \"publishedStatus\": \"IN PROGRESS\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/tutorials/mass_delete",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials",
+												"mass_delete"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "/tutorial/mass_delete",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code 405 [Method not allowed]\", function () {\r",
+													"    pm.response.to.have.status(405);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{jwttoken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "authentication-token",
+												"value": "{{jwttutorialtoken}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"title\": \"Title UPDATED\",\r\n    \"description\": \"A nice UPDATED\",\r\n    \"videoUrl\": \"http://www.UPDATED.com\",\r\n    \"publishedStatus\": \"IN PROGRESS\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/tutorials/mass_delete",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"tutorials",
+												"mass_delete"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "Authenticate",
+							"item": [
+								{
+									"name": "/auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code 405 [Method not allowed]\", function () {\r",
+													"    pm.response.to.have.status(405);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"email\": \"mail@6.com\",\r\n    \"password\": \"pa$$6666##S3cre7\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/auth",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"auth"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "/auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code 405 [Method not allowed]\", function () {\r",
+													"    pm.response.to.have.status(405);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"email\": \"mail@6.com\",\r\n    \"password\": \"pa$$6666##S3cre7\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/auth",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"auth"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "/auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code 405 [Method not allowed]\", function () {\r",
+													"    pm.response.to.have.status(405);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n    \"email\": \"mail@6.com\",\r\n    \"password\": \"pa$$6666##S3cre7\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/auth",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"auth"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					],
+					"description": "This collection will test not supported method responses",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "API Version 2",
+			"item": [
+				{
+					"name": "Status 501 - Not implemented",
+					"item": [
+						{
+							"name": "Version 2 example",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}:{{port}}/api/v2/",
+									"host": [
+										"{{base_url}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"v2",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code 501 [Not Implemented Exception]\", function () {",
+									"    pm.response.to.have.status(501);",
+									"});"
+								]
+							}
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"const base_url = pm.environment.get(\"base_url\")",
+					"const port = pm.environment.get(\"port\")",
+					"const version = pm.environment.get(\"version\")",
+					"",
+					"pm.environment.set(\"url\", `${base_url}:${port}/api/${version}`);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

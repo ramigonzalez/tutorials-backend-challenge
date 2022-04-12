@@ -1,0 +1,437 @@
+{
+	"info": {
+		"_postman_id": "662aa63c-e0ef-4342-b25d-c6cc5005f152",
+		"name": "Tutorials CRUD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Tutorials",
+			"item": [
+				{
+					"name": "Get tutorials",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwttoken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/tutorials",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"tutorials"
+							],
+							"query": [
+								{
+									"key": "description",
+									"value": "description",
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "title",
+									"disabled": true
+								},
+								{
+									"key": "id",
+									"value": "id",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "orderBy",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "limit",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "offset",
+									"disabled": true
+								},
+								{
+									"key": "condition",
+									"value": "AND",
+									"description": "The parameter will be used for retrieving either exact or contain matches between title and description",
+									"disabled": true
+								}
+							]
+						},
+						"description": "*   Supports **title** and **description** filtering\n*   Supports **tutorial's ID** sorting\n*   Offset based pagination suported"
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve single tutorial",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response body has 'tutorial' property\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    console.log(jsonData.data)\r",
+									"    pm.expect(jsonData.data).to.has.property(\"tutorial\");\r",
+									"\r",
+									"    const tutorial = jsonData.data.tutorial;\r",
+									"    pm.environment.set(\"tutorial_id\", tutorial.id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwttoken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/tutorials/{{tutorial_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"tutorials",
+								"{{tutorial_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tutorial token for creation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response body has 'data' property\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    console.log(jsonData)\r",
+									"    pm.expect(jsonData).to.has.property(\"data\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body has 'token' property\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    console.log(jsonData.data)\r",
+									"    pm.expect(jsonData.data).to.has.property(\"token\");\r",
+									"\r",
+									"    const jwttoken = jsonData.data.token;\r",
+									"    pm.environment.set(\"jwttutorialtoken\", jwttoken);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwttoken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/tutorials/token",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"tutorials",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create tutorial",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response body has 'tutorial' property\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    console.log(jsonData.data)\r",
+									"    pm.expect(jsonData.data).to.has.property(\"tutorial\");\r",
+									"\r",
+									"    const tutorial = jsonData.data.tutorial;\r",
+									"    pm.environment.set(\"tutorial_id\", tutorial.id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwttoken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "authentication-token",
+								"value": "{{jwttutorialtoken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"title\": \"Title 1\",\r\n    \"description\": \"A nice description\",\r\n    \"videoUrl\": \"http://www.myvideo.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/tutorials",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"tutorials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update tutorial",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response body has 'tutorial' property\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    console.log(jsonData.data)\r",
+									"    pm.expect(jsonData.data).to.has.property(\"tutorial\");\r",
+									"\r",
+									"    const tutorial = jsonData.data.tutorial;\r",
+									"    pm.environment.set(\"tutorial_id\", tutorial.id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwttoken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authentication-token",
+								"value": "{{jwttutorialtoken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"title\": \"Title UPDATED\",\r\n    \"description\": \"A nice description UPDATED\",\r\n    \"videoUrl\": \"http://www.UPDATED.com\",\r\n    \"publishedStatus\": \"IN PROGRESS\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/tutorials/{{tutorial_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"tutorials",
+								"{{tutorial_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete single tutorial",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwttoken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/tutorials/{{tutorial_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"tutorials",
+								"{{tutorial_id}}"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "order",
+									"value": null,
+									"disabled": true
+								}
+							]
+						},
+						"description": "*   Supports **title** and **description** filtering\n*   Supports **tutorial's ID** sorting\n*   Offset based pagination suported"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete all tutorials",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwttoken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/tutorials/mass_delete",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"tutorials",
+								"mass_delete"
+							],
+							"query": [
+								{
+									"key": "filter",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "order",
+									"value": null,
+									"disabled": true
+								}
+							]
+						},
+						"description": "*   Supports **title** and **description** filtering\n*   Supports **tutorial's ID** sorting\n*   Offset based pagination suported"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"const base_url = pm.environment.get(\"base_url\")",
+					"const port = pm.environment.get(\"port\")",
+					"const version = pm.environment.get(\"version\")",
+					"",
+					"pm.environment.set(\"url\", `${base_url}:${port}/api/${version}`);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Response body has 'data' property\", function () {",
+					"    var jsonData = pm.response.json();",
+					"    console.log(jsonData)",
+					"    pm.expect(jsonData).to.has.property(\"data\");",
+					"});",
+					"",
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "tutorial_id",
+			"value": "1"
+		},
+		{
+			"key": "controller",
+			"value": "tutorials",
+			"type": "string"
+		}
+	]
+}
