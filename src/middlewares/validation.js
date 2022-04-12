@@ -17,12 +17,12 @@ const authenticationValidationRules = () => {
 
 const getAllTutorialValidationRules = () => {
     return [
-        query('title').isString(),
-        query('description').isString(),
-        query('order').custom(validateOrder),
-        query('limit').isNumeric(),
-        query('offset').isNumeric(),
-        query('condition').custom(validateCondition),
+        query('title').optional().isString(),
+        query('description').optional().isString(),
+        query('order').optional().isIn(['ASC', 'DESC']).withMessage('Only ASC and DESC sorting option supported'),
+        query('limit').optional().isNumeric(),
+        query('offset').optional().isNumeric(),
+        query('condition').optional().isIn(['AND', 'OR']).withMessage('Only AND and OR condition supported'),
     ];
 };
 
@@ -62,18 +62,6 @@ const updateTutorialValidationRules = () => {
             'At least one attribute must be sent to update a tutorial'
         ),
     ];
-};
-
-const validateCondition = (condition) => {
-    if (condition !== 'AND' || condition !== 'OR') {
-        throw new Error('Only AND and OR condition supported');
-    }
-};
-
-const validateOrder = (order) => {
-    if (order !== 'ASC' || order !== 'DESC') {
-        throw new Error('Only ASC and DESC sorting option supported');
-    }
 };
 
 const rules = {

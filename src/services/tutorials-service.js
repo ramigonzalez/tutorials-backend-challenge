@@ -81,7 +81,7 @@ module.exports = class TutorialService {
                 .filter(([_, value]) => value)
                 .forEach(([_, value]) => order.push(value));
 
-            if (order.length > 0) opt.order = order;
+            if (order.length > 0) opt.order = [order];
         }
         return opt;
     }

@@ -35,11 +35,18 @@ module.exports = class TutorialsController {
         options.filters.description = description ? description : null;
         options.filters.condition = condition ? condition : null;
 
-        options.sorting.id = id ? id : null;
-        options.sorting.orderBy = !orderBy ? null : orderBy === 'DESC' ? orderBy : 'ASC';
+        if (orderBy) {
+            options.sorting.id = 'id';
+            if (['DESC', 'ASC'].findIndex((x) => x === orderBy) !== -1) {
+                options.sorting.orderBy = orderBy;
+            } else {
+                options.sorting.orderBy = 'ASC';
+            }
+        }
 
-        options.pagination.limit = limit && !isNaN(limit) ? parseInt(limit) : 10;
-        options.pagination.offset = offset && !isNaN(limit) ? parseInt(offset) : 0;
+        const lim = limit && !isNaN(limit) ? parseInt(limit) : 10;
+        options.pagination.limit = lim > 100 ? 100 : lim;
+        options.pagination.offset = offset && !isNaN(offset) ? parseInt(offset) : 0;
 
         return options;
     }
