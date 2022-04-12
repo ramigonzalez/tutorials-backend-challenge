@@ -12,12 +12,25 @@ module.exports = class TutorialsController {
         try {
             const options = this.prepareParams(req);
             const tutorials = await this.tutorialService.findAll(options);
+            const pagination = await this.getPagination(options.pagination);
             res.status(200);
             res.body = { tutorials };
+            res.pagination = pagination;
             next();
         } catch (error) {
             next(error);
         }
+    }
+
+    async getPagination({ limit, offset }) {
+        const total = await this.tutorialService.getTotalTutorials();
+        let pages = 1;
+        if (total === 0 || limit >= total) pages = 1;
+        else {
+            if (limit === 1) pages = total;
+            else pages = Math.floor(total / limit) + 1;
+        }
+        return { total, pages, page: offset };
     }
 
     prepareParams(req) {
@@ -44,11 +57,20 @@ module.exports = class TutorialsController {
             }
         }
 
-        const lim = limit && !isNaN(limit) ? parseInt(limit) : 10;
+        const lim = this.getPagination(limit, 10);
         options.pagination.limit = lim > 100 ? 100 : lim;
-        options.pagination.offset = offset && !isNaN(offset) ? parseInt(offset) : 0;
+        options.pagination.offset = this.getPagination(offset, 0);
 
         return options;
+    }
+
+    getPagination(number, def) {
+        let num;
+        if (number && !isNaN(number)) {
+            num = parseInt(number);
+            if (num < 0) num = def;
+        } else num = def;
+        return num;
     }
 
     async getTutorial(req, res, next) {

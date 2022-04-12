@@ -22,6 +22,14 @@ module.exports = class TutorialService {
         }
     }
 
+    async getTotalTutorials() {
+        try {
+            return await this.repository.Tutorial.count();
+        } catch (error) {
+            throw new InternalServerException('Somethig went wrong while retrieving total count of tutorials', error);
+        }
+    }
+
     buildQueryOptions({ filters, sorting, pagination }) {
         const reqOptions = {};
 
