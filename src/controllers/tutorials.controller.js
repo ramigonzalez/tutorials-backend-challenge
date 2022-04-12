@@ -2,9 +2,6 @@ const TutorialService = require('../services/tutorials.service');
 const UserService = require('../services/user.service');
 const Repository = require('../repositories');
 
-const { isValidUrl } = require('../utils/regex');
-const { ValidationException } = require('../exceptions');
-
 module.exports = class TutorialsController {
     constructor() {
         this.tutorialService = new TutorialService(Repository);
@@ -39,7 +36,7 @@ module.exports = class TutorialsController {
         options.filters.condition = condition ? condition : null;
 
         options.sorting.id = id ? id : null;
-        options.sorting.orderBy = orderBy === 'DESC' ? orderBy : 'ASC';
+        options.sorting.orderBy = !orderBy ? null : (orderBy === 'DESC' ? orderBy : 'ASC');
 
         options.pagination.limit = limit && !isNaN(limit) ? parseInt(limit) : 10;
         options.pagination.offset = offset && !isNaN(limit) ? parseInt(offset) : 0;
@@ -49,7 +46,7 @@ module.exports = class TutorialsController {
 
     async getTutorial(req, res, next) {
         try {
-            const id = req.params.id;
+            const id = this.getParam(req);
             const tutorial = await this.tutorialService.find(id);
             res.status(200);
             res.body = { tutorial };
@@ -59,11 +56,14 @@ module.exports = class TutorialsController {
         }
     }
 
+    getParam(req) {
+        return req.url.split('/')[2];
+    }
+
     getTutorialCreationToken(req, res, next) {
         try {
             const requestedTimestamp = Date.now();
-            const token =
-                this.tutorialService.getTutorialCreationToken(requestedTimestamp);
+            const token = this.tutorialService.getTutorialCreationToken(requestedTimestamp);
             res.status(200);
             res.body = { token };
             next();
@@ -76,7 +76,6 @@ module.exports = class TutorialsController {
         try {
             const { email } = res.userInfo;
             const { id } = await this.userService.getLoggedUser(email);
-            this.validateTutorialCreate(req.body);
             const tutorialRequested = this.sanitize(req.body);
             const tutorial = await this.tutorialService.create(tutorialRequested, id);
             res.status(201);
@@ -87,76 +86,22 @@ module.exports = class TutorialsController {
         }
     }
 
-    validateTutorialUpdate(tutorial) {
-        if (!tutorial) throw new ValidationException('Request body cannot be null or empty');
-
-        const { title, videoUrl, description, publishedStatus } = tutorial;
-
-        if (title && (typeof title != 'string' || title.trim() === ''))
-            throw new ValidationException("'title' param is invalid");
-
-        if (videoUrl && (typeof videoUrl != 'string' || videoUrl.trim() === '' || !isValidUrl(videoUrl)))
-            throw new ValidationException("'videoUrl' param is invalid");
-
-        if (description && (typeof description != 'string' || description.trim() === ''))
-            throw new ValidationException("'description' param is invalid");
-
-        if (
-            publishedStatus &&
-            (typeof publishedStatus != 'string' ||
-                publishedStatus.trim() === '' ||
-                ['PENDING', 'IN PROGRESS', 'PUBLISHED'].findIndex(publishedStatus) === -1)
-        )
-            throw new ValidationException("'publishedStatus' param is invalid");
-    }
-
-    validateTutorialCreate(tutorial) {
-        if (!tutorial) throw new ValidationException('Request body cannot be null or empty');
-
-        const { title, videoUrl, description } = tutorial;
-
-        if (!title || typeof title != 'string' || title.trim() === '')
-            throw new ValidationException("'title' param is invalid");
-
-        if (!videoUrl || typeof videoUrl != 'string' || videoUrl.trim() === '' || !isValidUrl(videoUrl))
-            throw new ValidationException("'videoUrl' param is invalid");
-
-        if (!description || typeof description != 'string' || description.trim() === '')
-            throw new ValidationException("'description' param is invalid");
-    }
-
-    validateTutorialCreate(tutorial) {
-        if (!tutorial) throw Error('Request body cannot be null or empty');
-
-        const { title, videoUrl, description } = tutorial;
-
-        if (!title || typeof title != 'string' || title.trim() === '')
-            throw Error("'title' param is invalid");
-        if (
-            !videoUrl ||
-            typeof videoUrl != 'string' ||
-            videoUrl.trim() === '' ||
-            !validateUrl(videoUrl)
-        )
-            throw Error("'videoUrl' param is invalid");
-        if (!description || typeof description != 'string' || description.trim() === '')
-            throw Error("'description' param is invalid");
-    }
-
-    sanitize({ title, videoUrl, description }) {
+    sanitize({ title, videoUrl, description, publishedStatus }) {
         return {
-            title: title.trim(),
-            videoUrl: videoUrl.trim(),
-            description: description.trim(),
+            title: title ? title.trim() : title,
+            videoUrl: videoUrl ? videoUrl.trim() : videoUrl,
+            description: description ? description.trim() : description,
+            publishedStatus: publishedStatus || null,
         };
     }
 
     async update(req, res, next) {
         try {
-            const user = res.userInfo;
-            this.validateTutorialUpdate(req.body);
+            const tutorialId = this.getParam(req);
+            const { email } = res.userInfo;
+            const user = await this.userService.getLoggedUser(email);
             const tutorialRequested = this.sanitize(req.body);
-            const tutorial = await this.tutorialService.update(tutorialRequested, user);
+            const tutorial = await this.tutorialService.update(tutorialRequested, tutorialId, user.id);
             res.status(200);
             res.body = { tutorial };
             next();
@@ -166,11 +111,11 @@ module.exports = class TutorialsController {
     }
 
     async delete(req, res, next) {
-        const tutorualId = req.params.id;
         try {
+            const tutorialId = this.getParam(req);
             const { email } = res.userInfo;
             const { id } = await this.userService.getLoggedUser(email);
-            const message = await this.tutorialService.delete(tutorualId, id);
+            const message = await this.tutorialService.delete(tutorialId, id);
             res.status(204);
             res.body = { message };
             next();
