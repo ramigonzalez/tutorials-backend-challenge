@@ -4,7 +4,7 @@
   "description": "Node.js Rest API with Express and MySQL",
   "main": "src/server.js",
   "scripts": {
-    "start": "set NODE_ENV=production&& node",
+    "start": "set NODE_ENV=production&& node src/server.js",
     "dev": "nodemon"
   },
   "repository": {

@@ -28,7 +28,10 @@ module.exports = class TutorialsController {
         if (total === 0 || limit >= total) pages = 1;
         else {
             if (limit === 1) pages = total;
-            else pages = Math.floor(total / limit) + 1;
+            else {
+                const pagesDiv = Math.floor(total / limit);
+                pages = total % limit === 0 ? pagesDiv : pagesDiv + 1;
+            }
         }
         return { total, pages, page: offset };
     }
@@ -57,14 +60,14 @@ module.exports = class TutorialsController {
             }
         }
 
-        const lim = this.getPagination(limit, 10);
+        const lim = this.getPaginationParams(limit, 10);
         options.pagination.limit = lim > 100 ? 100 : lim;
-        options.pagination.offset = this.getPagination(offset, 0);
+        options.pagination.offset = this.getPaginationParams(offset, 0);
 
         return options;
     }
 
-    getPagination(number, def) {
+    getPaginationParams(number, def) {
         let num;
         if (number && !isNaN(number)) {
             num = parseInt(number);
