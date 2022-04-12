@@ -10,15 +10,14 @@ module.exports = class UserService {
     async login(credentials) {
         credentials.password = hash(credentials.password);
         const ret = await this.repository.User.findOne({ where: credentials });
-        if (!ret)
-            throw new NotFoundException('Credentials provided does not correspond to any user');
+        if (!ret) throw new NotFoundException('Credentials provided does not correspond to any user');
         return ret.get();
     }
 
     async getLoggedUser(email) {
         if (!email) throw new BadRequestException('Invalid email requested');
-        const user = await this.repository.User.findOne({ email });
-        if (!user) throw new NotFoundException(`User email '${email}' was not found`);
-        return user.get();
+        const ret = await this.repository.User.findOne({ where: { email } });
+        if (!ret) throw new NotFoundException(`User email '${email}' was not found`);
+        return ret.get();
     }
 };

@@ -77,8 +77,11 @@ module.exports = class TutorialService {
     prepareOrderByCondition(opt = {}, { sorting }) {
         const order = [];
         if (sorting) {
-            order.push(Object.entries(sorting).map(([_, value]) => value));
-            opt.order = order;
+            Object.entries(sorting)
+                .filter(([_, value]) => value)
+                .forEach(([_, value]) => order.push(value));
+
+            if (order.length > 0) opt.order = order;
         }
         return opt;
     }
@@ -94,12 +97,10 @@ module.exports = class TutorialService {
     async find(id) {
         try {
             const ret = await this.repository.Tutorial.findByPk(id, this.prepareIncludeCondition());
-            if (!ret) throw new NotFoundException(`Tutorial with id: ${id} not found`);
+            if (!ret) throw new NotFoundException(`Error while retrieving tutorial with id: ${id}`);
             return ret.get();
         } catch (error) {
-            if (BaseError.isTrustedError(error)) {
-                throw new BadRequestException(`Error while retrieving tutorial with id: ${id}`, error);
-            }
+            if (BaseError.isTrustedError(error)) throw error;
             throw new InternalServerException(`Somethig went wrong while retrieving id: ${id}`, error);
         }
     }
@@ -139,43 +140,69 @@ module.exports = class TutorialService {
         }
     }
 
-    async update(tutorial, id) {
+    async update(tutorial, id, userId) {
         try {
-            const ret = await this.repository.Tutorial.update(tutorial, { where: { id } });
-            return ret.get();
+            //avoid updating null properties
+            const findOneRet = await this.repository.Tutorial.findOne({ where: { id, userId } });
+            if (findOneRet) {
+                const dbTutorial = findOneRet.get();
+                const tutorialToUpdate = this.getTutorialToUpdate(dbTutorial, tutorial);
+                const [affectedCount] = await this.repository.Tutorial.update(tutorialToUpdate, {
+                    where: { id, userId },
+                });
+                if (affectedCount === 0) await this.handleUpdateException(id, userId);
+                else return { id, ...tutorialToUpdate };
+            } else await this.handleUpdateException(id, userId);
         } catch (error) {
-            if (BaseError.isTrustedError(error)) {
-                throw new BadRequestException(`Requested tutorial could not be updated tutorialId=${id}`, error);
-            }
+            if (BaseError.isTrustedError(error)) throw error;
             throw new InternalServerException(`Somethig went wrong while updating tutorialId=${id}`, error);
         }
+    }
+
+    async handleUpdateException(id, userId) {
+        const findByPkRet = await this.repository.Tutorial.findByPk(id);
+        if (findByPkRet)
+            throw new BadRequestException('Could not update tutorials that does not belong to logged user');
+
+        const findOneRet = await this.repository.Tutorial.findOne({ where: { userId } });
+        if (!findOneRet) throw new NotFoundException(`Requested tutorial with id=${id} not found`);
+    }
+
+    getTutorialToUpdate(dbTutorial, tutorial) {
+        if (tutorial.title) dbTutorial.title = tutorial.title;
+        if (tutorial.description) dbTutorial.description = tutorial.description;
+        if (tutorial.videoUrl) dbTutorial.video_url = tutorial.videoUrl;
+        if (tutorial.publishedStatus) dbTutorial.published_status = tutorial.publishedStatus;
+        return dbTutorial;
     }
 
     async delete(id, userId) {
         try {
             const count = await this.repository.Tutorial.destroy({ where: { id, userId } });
             if (count === 1) return `Tutorial with id: ${id} was deleted successfully`;
-            else return `No deletion occurred`;
+            else await this.handleDeleteException(id, userId);
         } catch (error) {
-            if (BaseError.isTrustedError(error)) {
-                throw new BadRequestException(`Could not delete tutorial with id: ${id}`, error);
-            }
+            if (BaseError.isTrustedError(error)) throw error;
             throw new InternalServerException(`Somethig went wrong while deleting tutorialId=${id}`, error);
         }
     }
 
+    async handleDeleteException(id, userId) {
+        const findByPkRet = await this.repository.Tutorial.findByPk(id);
+        if (findByPkRet)
+            throw new BadRequestException('Could not delete tutorials that does not belong to logged user');
+
+        const findOneRet = await this.repository.Tutorial.findOne({ where: { userId } });
+        if (!findOneRet) throw new NotFoundException(`Requested tutorial with id=${id} not found`);
+    }
+
     async deleteAllByUser(userId) {
         try {
-            const count = await this.repository.Tutorial.destroy({
+            await this.repository.Tutorial.destroy({
                 where: { userId },
                 truncate: false,
             });
-            if (count === 1) return `Tutorial with id: ${id} was deleted successfully`;
-            else return `No deletion occurred`;
         } catch (error) {
-            if (BaseError.isTrustedError(error)) {
-                throw new BadRequestException(`Could not delete tutorials for user: ${userId}`, error);
-            }
             throw new InternalServerException(`Somethig went wrong while deleting for user: ${userId}`, error);
         }
     }
