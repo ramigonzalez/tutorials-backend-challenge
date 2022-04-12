@@ -25,7 +25,8 @@ const verifyToken = (req, res, next, isUser) => {
     const signOptions = isUser ? userSignOptions() : tutorialTokenSignOptions();
 
     jwt.verify(token, getPublicKey(), { algorithms: [signOptions.algorithm] }, (err, decoded) => {
-        if (err) next(new UnauthorizedException('Invalid token verification', err));
+        const tokenName = isUser ? 'Invalid user token verification' : 'Invalid tutorial creation token verification';
+        if (err) next(new UnauthorizedException(tokenName, err));
         if (isUser) res.userInfo = decoded;
         else res.tutorialToken = decoded;
         console.info('Token verified successfully!');

@@ -6,6 +6,7 @@ const { verifyUserToken, verifyTutorialToken } = require('./jwttoken.handler');
 const { allowAdminOnly, tutorialTokenExpiration } = require('./authorization.handler');
 
 const { allowedMethods } = require('./method-not-allowed');
+const { validateErrors, rules } = require('./validation');
 
 module.exports = {
     notFound,
@@ -16,4 +17,6 @@ module.exports = {
     allowAdminOnly,
     tutorialTokenExpiration,
     allowedMethods,
+    validateErrors,
+    rules,
 };

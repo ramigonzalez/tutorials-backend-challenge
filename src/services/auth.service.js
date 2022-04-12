@@ -2,7 +2,7 @@ const Repository = require('../repositories');
 const jwt = require('jsonwebtoken');
 const { getPrivateKey, getRandomNumber, userSignOptions } = require('../utils/jwttoken');
 const UserService = require('./user.service');
-const { NotFoundException } = require('../exceptions');
+const { NotFoundException, BaseError } = require('../exceptions');
 
 module.exports = class AuthService {
     constructor(repository = Repository) {
@@ -13,24 +13,28 @@ module.exports = class AuthService {
     async authenticate(credentials) {
         try {
             const user = await this.userService.login(credentials);
+            if (!user) throw new NotFoundException('Requested user does not exists');
             return sessionToken(user);
         } catch (error) {
-            if (BaseError.isTrustedError(error)) {
-                throw new NotFoundException('Could not authenticate requested user', error);
-            }
+            if (BaseError.isTrustedError(error)) throw error;
             throw new InternalServerException('Somethig went wrong authenticating user', error);
         }
     }
 };
 
 const sessionToken = (user) => {
-    const privateKey = getPrivateKey();
+    try {
+        const privateKey = getPrivateKey();
 
-    const { email, role } = user;
-    const payload = {
-        email,
-        role,
-        randomness: getRandomNumber(),
-    };
-    return jwt.sign(payload, privateKey, userSignOptions());
+        const { email, role } = user;
+        const payload = {
+            email,
+            role,
+            randomness: getRandomNumber(),
+        };
+        return jwt.sign(payload, privateKey, userSignOptions());
+    } catch (error) {
+        if (BaseError.isTrustedError(error)) throw error;
+        throw new InternalServerException('Somethig went while creating session token', error);
+    }
 };
