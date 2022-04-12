@@ -1,5 +1,5 @@
-const TutorialService = require('../services/tutorials.service');
-const UserService = require('../services/user.service');
+const TutorialService = require('../services/tutorials-service');
+const UserService = require('../services/user-service');
 const Repository = require('../repositories');
 
 module.exports = class TutorialsController {

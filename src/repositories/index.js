@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
-const { createDummyData } = require('./dummy.db');
-const dbConfig = require('../../config/db.config.js');
+const { createDummyData } = require('./dummy-db');
+const dbConfig = require('../../config/db-config.js');
 
 module.exports = class Repository {
     static connect() {

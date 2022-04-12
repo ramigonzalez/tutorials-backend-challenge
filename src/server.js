@@ -4,7 +4,7 @@ loadConfiguration();
 require('express-async-errors');
 
 const Repository = require('./repositories');
-const { okHandler, errorHandler, notFound } = require('./middlewares');
+const { okResponse, errorHandler, pathNotFound } = require('./middlewares');
 const routes = require('./routes');
 const express = require('express');
 const morgan = require('morgan');
@@ -20,8 +20,8 @@ app.use(morgan('dev'));
 
 routes(app);
 
-app.use(notFound);
-app.use(okHandler);
+app.use(pathNotFound);
+app.use(okResponse);
 app.use(errorHandler);
 
 Repository.init()

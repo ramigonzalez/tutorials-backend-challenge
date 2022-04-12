@@ -1,7 +1,7 @@
 const Repository = require('../repositories');
 const jwt = require('jsonwebtoken');
 const { getPrivateKey, getRandomNumber, userSignOptions } = require('../utils/jwttoken');
-const UserService = require('./user.service');
+const UserService = require('./user-service');
 const { NotFoundException, BaseError } = require('../exceptions');
 
 module.exports = class AuthService {

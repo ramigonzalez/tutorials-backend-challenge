@@ -1,4 +1,4 @@
-const TutorialsController = require('../../controllers/tutorials.controller');
+const TutorialsController = require('../../controllers/tutorials-controller');
 const {
     allowAdminOnly,
     tutorialTokenExpiration,
@@ -63,7 +63,7 @@ module.exports = (app) => {
 
 const path = {
     TUTORIALS: /\/tutorials((\?\w+\=\w*)(&\w+\=\w*)*)*$/,
-    
+
     TUTORIAL_TOKEN: '/tutorials/token',
     SINGLE_TUTORIAL: /\/tutorials\/\d+$/,
     MASS_DELETE: '/tutorials/mass_delete',

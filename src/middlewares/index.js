@@ -1,17 +1,17 @@
-const notFound = require('./notfound.handler');
-const errorHandler = require('./error.handler');
-const okHandler = require('./ok.handler');
+const pathNotFound = require('./path-notfound');
+const okResponse = require('./ok-response');
+const errorHandler = require('./error-handler');
 
-const { verifyUserToken, verifyTutorialToken } = require('./jwttoken.handler');
-const { allowAdminOnly, tutorialTokenExpiration } = require('./authorization.handler');
+const { verifyUserToken, verifyTutorialToken } = require('./jwttoken-verifier');
+const { allowAdminOnly, tutorialTokenExpiration } = require('./authorization');
 
 const { allowedMethods } = require('./method-not-allowed');
 const { validateErrors, rules } = require('./validation');
 
 module.exports = {
-    notFound,
+    pathNotFound,
     errorHandler,
-    okHandler,
+    okResponse,
     verifyUserToken,
     verifyTutorialToken,
     allowAdminOnly,

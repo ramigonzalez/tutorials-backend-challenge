@@ -1,5 +1,5 @@
-const AuthController = require('../../controllers/auth.controller');
-const { verifyUserToken, allowAdminOnly, allowedMethods, validateErrors, rules } = require('../../middlewares');
+const AuthController = require('../../controllers/auth-controller');
+const { allowedMethods, validateErrors, rules } = require('../../middlewares');
 const httpMethods = require('../http-methods');
 
 module.exports = (app) => {
