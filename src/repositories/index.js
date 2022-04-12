@@ -45,14 +45,8 @@ module.exports = class Repository {
             await this.initDb();
             console.info('Database connection OK');
         } catch (err) {
-            console.error('Error trying to connect to database');
-            let error;
-            if (err.name && (err.name === 'SequelizeHostNotFoundError' || err.name === 'SequelizeConnectionError')) {
-                console.error('Message:', err.message);
-                error = new Error(err.message);
-            } else error = new Error(err);
-
-            throw error;
+            console.error('Error trying to connect to database', err);
+            throw err;
         }
     }
 };

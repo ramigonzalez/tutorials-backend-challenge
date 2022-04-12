@@ -9,7 +9,6 @@ const routes = require('./routes');
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const { BaseError } = require('./exceptions');
 
 const app = express();
 const port = process.env.NODE_PORT;
@@ -31,15 +30,3 @@ Repository.init()
         console.error('Could not connect with database', err.message);
         process.exit(1);
     });
-
-process.on('unhandledRejection', (reason, promise) => {
-    console.error('Error: unhandledRejection');
-    throw reason;
-});
-
-process.on('uncaughtException', (error) => {
-    console.error('Error: uncaughtException');
-    if (!error instanceof BaseError) {
-        process.exit(1);
-    }
-});

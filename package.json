@@ -2,12 +2,11 @@
   "name": "tutorial-back-test",
   "version": "1.0.0",
   "description": "Node.js Rest API with Express and MySQL",
+  "main": "src/server.js",
   "scripts": {
-    "start": "set NODE_ENV=production&& node src/server.js",
-    "dev": "nodemon src/server.js",
-    "test": "set NODE_ENV=test&& jest --watch"
+    "start": "set NODE_ENV=production&& node",
+    "dev": "nodemon"
   },
-  "jest": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ramigonzalez/tutorial-back-test.git"
@@ -30,9 +29,6 @@
     "sequelize": "^6.18.0"
   },
   "devDependencies": {
-    "@types/jest": "^27.4.1",
-    "jest": "^27.5.1",
-    "nodemon": "^2.0.15",
-    "supertest": "^6.2.2"
+    "nodemon": "^2.0.15"
   }
 }
