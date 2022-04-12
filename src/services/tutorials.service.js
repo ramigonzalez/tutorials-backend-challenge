@@ -105,9 +105,9 @@ module.exports = class TutorialService {
         }
     }
 
-    getTutorialCreationToken(timestamp) {
+    async getTutorialCreationToken(timestamp) {
         try {
-            const privateKey = getPrivateKey();
+            const privateKey = await getPrivateKey();
             const createdAt = new Date(timestamp).toISOString();
             const payload = {
                 timestamp,

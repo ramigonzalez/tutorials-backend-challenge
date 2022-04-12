@@ -3,17 +3,17 @@ const { UnauthorizedException } = require('../exceptions');
 
 const { getPublicKey, userSignOptions, tutorialTokenSignOptions } = require('../utils/jwttoken');
 
-const verifyUserToken = (req, res, next) => {
+const verifyUserToken = async (req, res, next) => {
     console.info('Validating authorization user token');
-    verifyToken(req, res, next, true);
+    await verifyToken(req, res, next, true);
 };
 
-const verifyTutorialToken = (req, res, next) => {
+const verifyTutorialToken = async (req, res, next) => {
     console.info('Validating authorization tutorial token');
-    verifyToken(req, res, next, false);
+    await verifyToken(req, res, next, false);
 };
 
-const verifyToken = (req, res, next, isUser) => {
+const verifyToken = async (req, res, next, isUser) => {
     const token = getToken(req, isUser);
     if (!token) {
         const message = isUser ? 'Session token not found' : 'Tutorial creation token not found';
@@ -23,8 +23,8 @@ const verifyToken = (req, res, next, isUser) => {
     }
 
     const signOptions = isUser ? userSignOptions() : tutorialTokenSignOptions();
-
-    jwt.verify(token, getPublicKey(), { algorithms: [signOptions.algorithm] }, (err, decoded) => {
+    const publicKey = await getPublicKey();
+    jwt.verify(token, publicKey, { algorithms: [signOptions.algorithm] }, (err, decoded) => {
         const tokenName = isUser ? 'Invalid user token verification' : 'Invalid tutorial creation token verification';
         if (err) next(new UnauthorizedException(tokenName, err));
         if (isUser) res.userInfo = decoded;

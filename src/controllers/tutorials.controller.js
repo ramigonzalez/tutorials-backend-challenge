@@ -36,7 +36,7 @@ module.exports = class TutorialsController {
         options.filters.condition = condition ? condition : null;
 
         options.sorting.id = id ? id : null;
-        options.sorting.orderBy = !orderBy ? null : (orderBy === 'DESC' ? orderBy : 'ASC');
+        options.sorting.orderBy = !orderBy ? null : orderBy === 'DESC' ? orderBy : 'ASC';
 
         options.pagination.limit = limit && !isNaN(limit) ? parseInt(limit) : 10;
         options.pagination.offset = offset && !isNaN(limit) ? parseInt(offset) : 0;
@@ -60,10 +60,10 @@ module.exports = class TutorialsController {
         return req.url.split('/')[2];
     }
 
-    getTutorialCreationToken(req, res, next) {
+    async getTutorialCreationToken(req, res, next) {
         try {
             const requestedTimestamp = Date.now();
-            const token = this.tutorialService.getTutorialCreationToken(requestedTimestamp);
+            const token = await this.tutorialService.getTutorialCreationToken(requestedTimestamp);
             res.status(200);
             res.body = { token };
             next();

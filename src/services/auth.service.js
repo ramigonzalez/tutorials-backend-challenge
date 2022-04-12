@@ -14,7 +14,7 @@ module.exports = class AuthService {
         try {
             const user = await this.userService.login(credentials);
             if (!user) throw new NotFoundException('Requested user does not exists');
-            return sessionToken(user);
+            return await sessionToken(user);
         } catch (error) {
             if (BaseError.isTrustedError(error)) throw error;
             throw new InternalServerException('Somethig went wrong authenticating user', error);
@@ -22,9 +22,9 @@ module.exports = class AuthService {
     }
 };
 
-const sessionToken = (user) => {
+const sessionToken = async (user) => {
     try {
-        const privateKey = getPrivateKey();
+        const privateKey = await getPrivateKey();
 
         const { email, role } = user;
         const payload = {

@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { InternalServerException } = require('../exceptions');
+const { InternalServerException, BaseError } = require('../exceptions');
 
 const userSignOptions = () => {
     const isUser = true;
@@ -25,34 +25,30 @@ const signOptions = (isUser) => {
     };
 };
 
-const getPrivateKey = () => {
+const getPrivateKey = async () => {
     const path = process.env.JWT_PRIVATE_KEY_PATH || '';
     if (!path) throw new InternalServerException('Private key path configuration is missing');
-    return readKey(path);
+    return await readKey(path);
 };
 
-const getPublicKey = () => {
+const getPublicKey = async () => {
     const path = process.env.JWT_PUBLIC_KEY_PATH || '';
     if (!path) throw new InternalServerException('Public key path configuration is missing');
-    return readKey(path);
+    return await readKey(path);
 };
 
-const readKey = (path) => {
+const readKey = async (path) => {
     try {
-        checkIfFileExists(path);
-        return fs.readFileSync(path, 'utf8');
+        const fileExists = await checkIfFileExists(path);
+        if (!fileExists) throw new InternalServerException(`File on path: '${path}' does not exist`);
+        return await fs.promises.readFile(path, 'utf8');
     } catch (error) {
-        throw new InternalServerException(
-            `Something went wrong while reading keys on path: '${path}'`,
-            error
-        );
+        if (BaseError.isTrustedError(error)) throw error;
+        throw new InternalServerException(`Something went wrong while reading keys on path: '${path}'`, error);
     }
 };
 
-const checkIfFileExists = (path) => {
-    if (!fs.existsSync(path))
-        throw new InternalServerException(`File on path: '${path}' does not exist`);
-};
+const checkIfFileExists = async (path) => !!(await fs.promises.stat(path).catch((e) => false));
 
 const getRandomNumber = () => Math.floor(Math.random() * Date.now());
 
