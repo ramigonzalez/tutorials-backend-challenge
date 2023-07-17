@@ -1,4 +1,4 @@
-# tutorial-back-test
+# Tutorials-backend-challenge
 Node.js Rest API with Express and MySQL
 
 ## Pre-requisits
